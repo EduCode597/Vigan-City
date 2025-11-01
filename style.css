@@ -145,3 +145,33 @@ footer a {
   color: #f8d49d;
   text-decoration: none;
 }
+
+/* Outline Styles */
+.outline-box {
+  outline: 2px solid #8a4b2f;   /* outline border */
+  outline-offset: 8px;          /* space between box and outline */
+  border-radius: 12px;          /* visual rounding */
+  padding: 1rem;                /* spacing from edge */
+}
+
+@media (max-width: 576px) {
+  .outline-box {
+    outline-offset: 6px;
+    padding: .75rem;
+  }
+}
+
+/* Outline for Culture section row (matches .outline-box) */
+#culture .row.align-items-center {
+  outline: 2px solid #8a4b2f;
+  outline-offset: 8px;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+@media (max-width: 576px) {
+  #culture .row.align-items-center {
+    outline-offset: 6px;
+    padding: .75rem;
+  }
+}

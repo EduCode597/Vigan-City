@@ -2,16 +2,15 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Vigan Heritage Escape</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
@@ -21,11 +20,21 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#about">About</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#attractions">Attractions</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#culture">Culture</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#gallery">Gallery</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#plan">Plan Visit</a></li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#attractions">Attractions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#culture">Culture</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#gallery">Gallery</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="#plan">Plan Visit</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -34,22 +43,27 @@
   <!-- Hero -->
   <section class="hero d-flex flex-column justify-content-center align-items-center text-center">
     <h1>Discover Vigan City</h1>
-    <p class="lead mt-3">Walk through history. Experience culture. Embrace beauty.</p>
+    <p class="lead mt-3">
+      Walk through history. Experience culture. Embrace beauty.
+    </p>
     <a href="#about" class="btn btn-heritage mt-4">Start Your Journey</a>
   </section>
 
   <!-- About -->
   <section id="about" class="container my-5 py-4">
-    <div class="row align-items-center">
+    <div class="row align-items-center outline-box">
       <div class="col-md-6">
-        <img src="images/attractions/heritageVillage.jpg"
-          class="img-fluid rounded-3 shadow-sm" alt="Vigan Heritage Village">
+        <img src="images/attractions/heritageVillage.jpg" class="img-fluid rounded-3 shadow-sm"
+          alt="Vigan Heritage Village" />
       </div>
       <div class="col-md-6">
         <h2 class="fw-bold mb-3">About Vigan</h2>
-        <p>Vigan City, in Ilocos Sur, is a UNESCO World Heritage Site famous for its cobblestone streets, Spanish
-          colonial houses, and local crafts. It's a living museum of Philippine history, where every corner tells a
-          story.</p>
+        <p>
+          Vigan City, in Ilocos Sur, is a UNESCO World Heritage Site famous
+          for its cobblestone streets, Spanish colonial houses, and local
+          crafts. It's a living museum of Philippine history, where every
+          corner tells a story.
+        </p>
         <ul>
           <li>UNESCO Heritage City</li>
           <li>Preserved Spanish Architecture</li>
@@ -64,33 +78,44 @@
     <h2 class="section-title">Top Attractions</h2>
     <div class="row g-4">
       <div class="col-md-4">
-        <div class="card shadow-sm">
-          <img src="images/attractions/CalleCrisologo.jpg"
-            class="card-img-top" alt="Calle Crisologo">
-          <div class="card-body">
+        <div class="card h-100 shadow-sm">
+          <div class="ratio ratio-16x9 card-img-top overflow-hidden">
+            <img src="images/attractions/CalleCrisologo.jpg" alt="Calle Crisologo" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">Calle Crisologo</h5>
-            <p class="card-text">Step back in time with a stroll along this cobblestone street filled with old-world
-              charm.</p>
+            <p class="card-text">
+              Step back in time with a stroll along this cobblestone street
+              filled with old-world charm.
+            </p>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card shadow-sm">
-          <img src="images/attractions/PlazaSalcedo.jpg" class="card-img-top"
-            alt="Plaza Salcedo">
-          <div class="card-body">
+        <div class="card h-100 shadow-sm">
+          <div class="ratio ratio-16x9 card-img-top overflow-hidden">
+            <img src="images/attractions/PlazaSalcedo.jpg" alt="Plaza Salcedo" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">Plaza Salcedo</h5>
-            <p class="card-text">Enjoy the nightly dancing fountain shows — a colorful highlight for every visitor.</p>
+            <p class="card-text">
+              Enjoy the nightly dancing fountain shows — a colorful highlight
+              for every visitor.
+            </p>
           </div>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card shadow-sm">
-          <img src="images/attractions/ViganCathedral.jpg" class="card-img-top"
-            alt="Vigan Cathedral">
-          <div class="card-body">
+        <div class="card h-100 shadow-sm">
+          <div class="ratio ratio-16x9 card-img-top overflow-hidden">
+            <img src="images/attractions/ViganCathedral.jpg" alt="Vigan Cathedral" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div class="card-body d-flex flex-column">
             <h5 class="card-title">St. Paul Cathedral</h5>
-            <p class="card-text">Marvel at its centuries-old architecture and serene spiritual atmosphere.</p>
+            <p class="card-text">
+              Marvel at its centuries-old architecture and serene spiritual
+              atmosphere.
+            </p>
           </div>
         </div>
       </div>
@@ -98,17 +123,29 @@
   </section>
 
   <!-- Culture -->
-  <section id="culture" class="container my-5 py-4">
+  <section id="culture" class="container my-5 py-4 ">
     <h2 class="section-title">Culture & Cuisine</h2>
     <div class="row align-items-center">
       <div class="col-md-6">
-        <p>From handwoven *abel* fabrics to savory *Vigan longganisa*, the city captures Ilocano artistry at its finest.
-          Each craft and dish is a piece of tradition passed through generations.</p>
+        <p>
+          Vigan’s culture is a harmonious blend of history, artistry, and tradition. Rooted in its Ilocano heritage, the
+          city preserves age-old customs through its architecture, crafts, and community life. From the cobblestone
+          streets and Spanish colonial houses to the vibrant festivals and local craftsmanship, Vigan stands as a living
+          museum that celebrates both the beauty of the past and the spirit of its people.
+        </p>
+        <p>
+          From handwoven *abel* fabrics to savory *Vigan longganisa*, the city
+          captures Ilocano artistry at its finest. Each craft and dish is a
+          piece of tradition passed through generations. From its time-honored
+          crafts to its distinct local flavors, Vigan reflects a culture
+          deeply rooted in tradition and creativity. Every creation and recipe
+          tells a quiet story of heritage, shaped by generations of skill and
+          pride.
+        </p>
         <p><strong>Must Try:</strong> Vigan Empanada, Bagnet, Longganisa</p>
       </div>
       <div class="col-md-6">
-        <img src="images/ViganEmpanada.jpg"
-          class="img-fluid rounded-3 shadow-sm" alt="Vigan Empanada">
+        <img src="images/ViganEmpanada.jpg" class="img-fluid rounded-3 shadow-sm" alt="Vigan Empanada" />
       </div>
     </div>
   </section>
@@ -120,56 +157,44 @@
       <div class="row g-3">
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/ViganNightMode.jpg"
-              alt="Vigan Night View" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/ViganNightMode.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/ViganNightMode.jpg" alt="Vigan Night View" loading="lazy" role="button"
+              data-bs-toggle="modal" data-bs-target="#lightboxModal" data-bs-src="images/gallery/ViganNightMode.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/calesa.jpg"
-              alt="Calesa Ride" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/calesa.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/calesa.jpg" alt="Calesa Ride" loading="lazy" role="button" data-bs-toggle="modal"
+              data-bs-target="#lightboxModal" data-bs-src="images/gallery/calesa.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/Vigan Pottery.jpg"
-              alt="Burnay Pottery" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/Vigan Pottery.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/Vigan Pottery.jpg" alt="Burnay Pottery" loading="lazy" role="button"
+              data-bs-toggle="modal" data-bs-target="#lightboxModal" data-bs-src="images/gallery/Vigan Pottery.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/Plaza_Burgos.jpg"
-              alt="Plaza Burgos" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/Plaza_Burgos.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/Plaza_Burgos.jpg" alt="Plaza Burgos" loading="lazy" role="button"
+              data-bs-toggle="modal" data-bs-target="#lightboxModal" data-bs-src="images/gallery/Plaza_Burgos.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/AbelWeaving.jpg"
-              alt="Abel Weaving" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/AbelWeaving.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/AbelWeaving.jpg" alt="Abel Weaving" loading="lazy" role="button"
+              data-bs-toggle="modal" data-bs-target="#lightboxModal" data-bs-src="images/gallery/AbelWeaving.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
         <div class="col-md-4 col-6">
           <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-            <img src="images/gallery/Vigan Longganisa.jpg"
-              alt="Longganisa" loading="lazy" role="button"
-              data-bs-toggle="modal" data-bs-target="#lightboxModal"
-              data-bs-src="images/gallery/Vigan Longganisa.jpg"
-              style="width:100%;height:100%;object-fit:cover;">
+            <img src="images/gallery/Vigan Longganisa.jpg" alt="Longganisa" loading="lazy" role="button"
+              data-bs-toggle="modal" data-bs-target="#lightboxModal" data-bs-src="images/gallery/Vigan Longganisa.jpg"
+              style="width: 100%; height: 100%; object-fit: cover" />
           </div>
         </div>
       </div>
@@ -180,32 +205,36 @@
   <div class="modal fade" id="lightboxModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content bg-transparent border-0">
-        <img id="lightboxImage" src="" class="img-fluid rounded shadow">
+        <img id="lightboxImage" src="" class="img-fluid rounded shadow" />
       </div>
     </div>
   </div>
 
-
   <!-- Plan Visit -->
   <section id="plan" class="container my-5">
     <h2 class="section-title">Plan Your Visit</h2>
-    <div class="row g-4">
+    <div class="row g-4 align-items-stretch">
       <div class="col-md-4">
-        <div class="card p-4 shadow-sm">
+        <div class="card h-100 p-4 shadow-sm">
           <h5>Best Time to Visit</h5>
           <p>Cooler months (Nov–Feb) with festivals and cozy weather.</p>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card p-4 shadow-sm">
+        <div class="card h-100 p-4 shadow-sm">
           <h5>Getting There</h5>
-          <p>8-hour bus ride from Manila or fly via Laoag Airport, then 2 hours by land.</p>
+          <p>
+            8-hour bus ride from Manila or fly via Laoag Airport, then 2 hours
+            by land.
+          </p>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="card p-4 shadow-sm">
+        <div class="card h-100 p-4 shadow-sm">
           <h5>Where to Stay</h5>
-          <p>Charming heritage inns and boutique hotels along Calle Crisologo.</p>
+          <p>
+            Charming heritage inns and boutique hotels along Calle Crisologo.
+          </p>
         </div>
       </div>
     </div>
@@ -213,21 +242,29 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 Vigan Heritage Escape | Designed by <strong>John Eduard Madriaga</strong></p>
-    <p><a href="https://educode597.github.io/">educode@develop.ph</a> | <a href="#">Back to top ↑</a></p>
+    <p>
+      © 2025 Vigan Heritage Escape | Designed by
+      <strong>John Eduard Madriaga</strong>
+    </p>
+    <p>
+      <a href="https://educode597.github.io/">educode@develop.ph</a> |
+      <a href="#">Back to top ↑</a>
+    </p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Lightbox Function -->
   <script>
-    const modal = document.getElementById('lightboxModal');
-    const modalImg = document.getElementById('lightboxImage');
-    document.querySelectorAll('[data-bs-target="#lightboxModal"]').forEach(img => {
-      img.addEventListener('click', () => {
-        modalImg.src = img.getAttribute('data-bs-src');
+    const modal = document.getElementById("lightboxModal");
+    const modalImg = document.getElementById("lightboxImage");
+    document
+      .querySelectorAll('[data-bs-target="#lightboxModal"]')
+      .forEach((img) => {
+        img.addEventListener("click", () => {
+          modalImg.src = img.getAttribute("data-bs-src");
+        });
       });
-    });
   </script>
 </body>
 
