@@ -1,0 +1,147 @@
+* { scroll-behavior: smooth; }
+
+body {
+  background-color: #fdfaf5;
+  color: #3c2f2f;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.navbar-brand {
+  color: #7b4b27 !important;
+}
+
+/* Hero */
+.hero {
+background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)),
+    url("./images/Thumbnail.jpg") center/cover no-repeat fixed;
+  color: white;
+  text-align: center;
+  padding: 200px 20px;
+  position: relative;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  animation: fadeInDown 1.2s ease;
+}
+
+.hero p {
+  animation: fadeInUp 1.5s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Button */
+.btn-heritage {
+  background-color: #d4a373;
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  border-radius: 50px;
+  transition: 0.3s;
+}
+
+.btn-heritage:hover {
+  background-color: #b88654;
+  transform: scale(1.05);
+}
+
+/* Section Titles */
+.section-title {
+  text-align: center;
+  font-weight: 700;
+  margin: 70px 0 40px;
+  color: #7b4b27;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  width: 80px;
+  height: 3px;
+  background: #d4a373;
+  display: block;
+  margin: 10px auto;
+  border-radius: 2px;
+}
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.card img {
+  height: 220px;
+  object-fit: cover;
+}
+
+/* Gallery */
+.gallery {
+  background: linear-gradient(135deg, #f9f3eb, #fff);
+  padding: 60px 0;
+}
+
+.gallery img {
+  border-radius: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* Testimonials */
+.testimonial {
+  background: linear-gradient(135deg, #f7ece1, #fff);
+  padding: 60px 0;
+}
+
+.testimonial blockquote {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: #5c3b26;
+}
+
+.testimonial .carousel-indicators [data-bs-target] {
+  background-color: #7b4b27;
+}
+
+/* Footer */
+footer {
+  background: #3c2f2f;
+  color: #fff;
+  text-align: center;
+  padding: 40px 0 20px;
+  margin-top: 60px;
+}
+
+footer a {
+  color: #f8d49d;
+  text-decoration: none;
+}
