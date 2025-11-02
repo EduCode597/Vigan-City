@@ -8,11 +8,29 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <!-- Auto-hide navbar styles -->
+  <style>
+    /* Keeps transitions smooth and accessible */
+    .auto-hide-navbar {
+      transition: transform 0.3s ease;
+      will-change: transform;
+    }
+
+    .auto-hide-navbar.is-hidden {
+      transform: translateY(-100%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .auto-hide-navbar {
+        transition: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg fixed-top">
+  <nav id="mainNav" class="navbar navbar-expand-lg fixed-top auto-hide-navbar">
     <div class="container">
       <a class="navbar-brand fw-bold" href="#">Vigan Heritage Escape</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -201,15 +219,6 @@
     </div>
   </section>
 
-  <!-- Lightbox Modal -->
-  <div class="modal fade" id="lightboxModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content bg-transparent border-0">
-        <img id="lightboxImage" src="" class="img-fluid rounded shadow" />
-      </div>
-    </div>
-  </div>
-
   <!-- Plan Visit -->
   <section id="plan" class="container my-5">
     <h2 class="section-title">Plan Your Visit</h2>
@@ -254,18 +263,51 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Lightbox Function -->
+  <!-- Auto-hide Navbar Script -->
   <script>
-    const modal = document.getElementById("lightboxModal");
-    const modalImg = document.getElementById("lightboxImage");
-    document
-      .querySelectorAll('[data-bs-target="#lightboxModal"]')
-      .forEach((img) => {
-        img.addEventListener("click", () => {
-          modalImg.src = img.getAttribute("data-bs-src");
-        });
-      });
+    (() => {
+      const nav = document.getElementById('mainNav');
+      if (!nav) return;
+
+      let lastY = window.scrollY;
+      let ticking = false;
+      const threshold = 8;        // ignore tiny scroll jitter
+      const revealAtTop = 56;     // always show near top
+
+      const collapse = nav.querySelector('.navbar-collapse');
+      const isMenuOpen = () => collapse && collapse.classList.contains('show');
+
+      const onScroll = () => {
+        const currentY = window.scrollY;
+        const delta = currentY - lastY;
+
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            if (!isMenuOpen()) {
+              if (delta > threshold && currentY > revealAtTop) {
+                nav.classList.add('is-hidden');    // scrolling down -> hide
+              } else if (delta < -threshold || currentY <= revealAtTop) {
+                nav.classList.remove('is-hidden'); // scrolling up/top -> show
+              }
+            } else {
+              nav.classList.remove('is-hidden');   // keep visible while menu open
+            }
+            lastY = currentY;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => nav.classList.remove('is-hidden'));
+
+      const toggler = nav.querySelector('.navbar-toggler');
+      if (toggler) toggler.addEventListener('click', () => nav.classList.remove('is-hidden'));
+    })();
   </script>
+
+
 </body>
 
 </html>
