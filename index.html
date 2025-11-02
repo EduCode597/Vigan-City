@@ -81,7 +81,23 @@
       <p class="lead mt-3">
         Walk through history. Experience culture. Embrace beauty.
       </p>
-      <a href="#about" class="btn btn-heritage mt-4">Start Your Journey</a>
+      <a id="heroCta" href="#about" class="btn btn-heritage mt-4"
+        >Explore Vigan</a
+      >
+      <script>
+        (function () {
+          const btn = document.getElementById("heroCta");
+          if (!btn) return;
+          const original = btn.textContent;
+          const hoverText = "Start Your Journey";
+          const showHover = () => (btn.textContent = hoverText);
+          const restore = () => (btn.textContent = original);
+          btn.addEventListener("mouseenter", showHover);
+          btn.addEventListener("mouseleave", restore);
+          btn.addEventListener("focus", showHover);
+          btn.addEventListener("blur", restore);
+        })();
+      </script>
     </section>
 
     <!-- About -->
@@ -152,10 +168,16 @@
         <div class="col-md-6">
           <h2 class="fw-bold mb-3">About Vigan</h2>
           <p>
-            Vigan City, in Ilocos Sur, is a UNESCO World Heritage Site famous
-            for its cobblestone streets, Spanish colonial houses, and local
-            crafts. It's a living museum of Philippine history, where every
-            corner tells a story.
+            Vigan City, the pride of Ilocos Sur, is a UNESCO World Heritage Site
+            and one of the New 7 Wonders Cities of the World known for its
+            timeless blend of Spanish colonial charm and Filipino culture.
+            Visitors can stroll along Calle Crisologo, lined with cobblestone
+            streets, ancestral houses, and kalesas, and enjoy local delicacies
+            like longganisa, empanada, and bagnet. Highlights include St. Paul’s
+            Cathedral, Plaza Salcedo, Bantay Bell Tower, and the Syquia Mansion
+            Museum. By night, the city glows with lights and music, especially
+            during the dancing fountain show, offering travelers a perfect mix
+            of history, culture, and romance.
           </p>
           <ul>
             <li>UNESCO Heritage City</li>
