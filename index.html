@@ -13,24 +13,8 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
-    <!-- Auto-hide navbar styles -->
-    <style>
-      /* Keeps transitions smooth and accessible */
-      .auto-hide-navbar {
-        transition: transform 0.3s ease;
-        will-change: transform;
-      }
-
-      .auto-hide-navbar.is-hidden {
-        transform: translateY(-100%);
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .auto-hide-navbar {
-          transition: none;
-        }
-      }
-    </style>
+    <!-- Auto-hide navbar styles moved to style.css -->
+    <!-- See: style.css for .auto-hide-navbar rules -->
   </head>
 
   <body>

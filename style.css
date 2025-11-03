@@ -175,3 +175,19 @@ footer a {
     padding: .75rem;
   }
 }
+
+/* Auto-hide navbar styles (moved from index.html) */
+.auto-hide-navbar {
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.auto-hide-navbar.is-hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auto-hide-navbar {
+    transition: none;
+  }
+}
