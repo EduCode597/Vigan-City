@@ -10,7 +10,6 @@ A single-page tourism website showcasing the charm of Vigan City, created with B
   - [Installation](#installation)  
   - [Deployment](#deployment)  
 - [Project Structure](#project-structure)  
-- [Customisation](#customisation)  
 - [Credits & License](#credits-license)  
 
 ## Overview  
