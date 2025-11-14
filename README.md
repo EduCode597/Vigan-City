@@ -53,7 +53,7 @@ On the site you’ll find:
    cd Vigan-City  
 3. Open index.html in your web browser to view the site locally.
 
-##Deployment##
+## Deployment
 Deployment
 - The site is designed for deployment via GitHub Pages:
 1. Push your changes to the main (or gh-pages) branch on GitHub.
@@ -61,7 +61,7 @@ Deployment
 3. Wait a few minutes for GitHub to build and publish the page.
 4. Access the site at: https://educode597.github.io/Vigan-City/
 
-##Project Structure##
+## Project Structure
 Vigan-City/
 │
 ├── index.html          ← Main HTML file  
@@ -73,11 +73,11 @@ Vigan-City/
 └── README.md           ← This documentation file  
 
 
-##Credits & License##
+## Credits & License
 - Website developed by John Eduard Madriaga (© 2025)
 - Images: (Specify source or license for each if using third-party imagery)
 - Built with Bootstrap (https://getbootstrap.com)
 - License: (Insert your chosen license, e.g., MIT, Apache 2.0)
 
-##MIT License##
+## MIT License
 - Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction… (include full license text if desired)
