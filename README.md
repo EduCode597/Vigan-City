@@ -1,7 +1,9 @@
 # Vigan Heritage Escape  
+
 A single-page tourism website showcasing the charm of Vigan City, created with Bootstrap, HTML, CSS, and JavaScript.
 
 ## Table of Contents  
+
 - [Overview](#overview)  
 - [Features](#features)  
 - [Technologies Used](#technologies-used)  
@@ -10,12 +12,14 @@ A single-page tourism website showcasing the charm of Vigan City, created with B
   - [Installation](#installation)  
   - [Deployment](#deployment)  
 - [Project Structure](#project-structure)  
-- [Credits & License](#credits-license)  
+- [Credits and License](#credits-and-license)  
 
 ## Overview  
+
 Vigan Heritage Escape is designed to guide visitors through the historic and cultural highlights of Vigan City: from colonial architecture and cobblestone streets to Ilocano cuisine and lively cultural scenes. The site aims to provide an engaging, responsive experience for desktop and mobile users alike.
 
 On the site you’ll find:  
+
 - An “About” section with a brief history and introduction to Vigan City  
 - A “Top Attractions” section highlighting key landmarks (e.g., Calle Crisologo, Plaza Salcedo, St. Paul Cathedral)  
 - A “Culture & Cuisine” section with local specialties like longganisa, empanada and bagnet  
@@ -23,6 +27,7 @@ On the site you’ll find:
 - A “Plan Your Visit” section with practical information on best time to visit, how to get there, where to stay  
 
 ## Features  
+
 - Fully responsive design using Bootstrap  
 - Smooth scroll navigation between sections  
 - Image carousel/slider for showcasing visuals  
@@ -31,6 +36,7 @@ On the site you’ll find:
 - Deployed via GitHub Pages for easy hosting  
 
 ## Technologies Used  
+
 - HTML5  
 - CSS3 (including Bootstrap classes)  
 - JavaScript (vanilla)  
@@ -41,27 +47,35 @@ On the site you’ll find:
 ## Getting Started  
 
 ### Prerequisites  
+
 - A modern web browser (Chrome, Firefox, Edge, Safari)  
 - Git installed (optional, for cloning repository)  
 
 ### Installation  
+
 1. Clone the repository:  
+
    ```bash  
    git clone https://github.com/educode597/Vigan-City.git  
 2. Navigate to the project folder:
+
    ```bash
    cd Vigan-City  
 3. Open index.html in your web browser to view the site locally.
 
 ## Deployment
+
 Deployment
+
 - The site is designed for deployment via GitHub Pages:
+
 1. Push your changes to the main (or gh-pages) branch on GitHub.
 2. In the repository Settings > Pages, select the source branch and folder (/ (root) or /docs).
 3. Wait a few minutes for GitHub to build and publish the page.
-4. Access the site at: https://educode597.github.io/Vigan-City/
+4. Access the site at: <https://educode597.github.io/Vigan-City/>
 
 ## Project Structure
+
 Vigan-City/
 │
 ├── index.html          ← Main HTML file  
@@ -72,13 +86,13 @@ Vigan-City/
 ├── img/                ← Images used in the site (gallery, attractions, etc.)  
 └── README.md           ← This documentation file  
 
+## Credits and License
 
-## Credits & License
 - Website developed by John Eduard Madriaga (© 2025)
 - Images:
 Images sourced from Pinterest. All copyrights belong to their respective owners.
 Images are used only for educational and non-commercial purposes.
-- Built with Bootstrap (https://getbootstrap.com)
+- Built with Bootstrap (<https://getbootstrap.com>)
 - License:
   MIT License
 
@@ -101,4 +115,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
