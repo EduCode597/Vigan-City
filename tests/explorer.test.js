@@ -143,4 +143,41 @@ describe('split-screen landmark explorer', () => {
     dom.spotlightEl.querySelector('[data-open-plan]').click();
     expect(onOpenPlan).toHaveBeenCalled();
   });
+
+  it('preserves keyboard focus across category clicks, row saves, Day/Night toggles, and spotlight saves', () => {
+    const store = createItineraryStore({ places: PLACES, presets: TRIP_PRESETS, storage: null });
+    const dom = createExplorerDom();
+
+    initExplorer({
+      places: PLACES,
+      categories: PLACE_CATEGORIES,
+      store,
+      ...dom,
+      onOpenPlan: vi.fn()
+    });
+
+    // Focus and click row save button
+    const rowSave = dom.listEl.querySelector('[data-save-place="calle-crisologo"]');
+    rowSave.focus();
+    rowSave.click();
+    expect(document.activeElement.getAttribute('data-save-place')).toBe('calle-crisologo');
+
+    // Focus and click Day/Night toggle in spotlight
+    const nightBtn = dom.spotlightEl.querySelector('[data-night-toggle]');
+    nightBtn.focus();
+    nightBtn.click();
+    expect(document.activeElement.hasAttribute('data-night-toggle')).toBe(true);
+
+    // Focus and click spotlight save button
+    const spotSave = dom.spotlightEl.querySelector('[data-spotlight-save]');
+    spotSave.focus();
+    spotSave.click();
+    expect(document.activeElement.getAttribute('data-spotlight-save')).toBe('calle-crisologo');
+
+    // Focus and click museum filter chip
+    const museumChip = dom.filtersEl.querySelector('[data-category="museum"]');
+    museumChip.focus();
+    museumChip.click();
+    expect(document.activeElement.getAttribute('data-category')).toBe('museum');
+  });
 });

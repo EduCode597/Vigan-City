@@ -20,6 +20,8 @@
     --vigan-accent-hover: #993b27;
     --vigan-accent-contrast: #ffffff;
     --vigan-accent-soft: #f9ebe7;
+    --vigan-accent-soft-fg: #993b27;
+    --vigan-error: #b42318;
     --vigan-shadow-hover: 0 8px 24px rgba(21, 25, 30, 0.06);
     --vigan-header-bg: rgba(255, 255, 255, 0.9);
     --vigan-backdrop: rgba(16, 19, 23, 0.48);
@@ -52,6 +54,8 @@
     --vigan-accent-hover: #eb7c63;
     --vigan-accent-contrast: #101317;
     --vigan-accent-soft: #2b1d1a;
+    --vigan-accent-soft-fg: #df674b;
+    --vigan-error: #f97066;
     --vigan-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.32);
     --vigan-header-bg: rgba(23, 28, 34, 0.9);
     --vigan-backdrop: rgba(5, 7, 10, 0.72);
@@ -280,7 +284,7 @@
 
   .plan-trigger-btn {
     background-color: var(--vigan-accent-soft);
-    color: var(--vigan-accent);
+    color: var(--vigan-accent-soft-fg);
     border: 1px solid color-mix(in srgb, var(--vigan-accent) 36%, transparent);
     font-variant-numeric: tabular-nums;
   }
@@ -518,9 +522,11 @@
     max-width: 60ch;
   }
 
-  .reveal {
+  html.has-reveal .reveal:not(.is-visible) {
     opacity: 0;
     transform: translateY(14px);
+  }
+  .reveal {
     transition: opacity 0.6s var(--vigan-ease), transform 0.6s var(--vigan-ease);
   }
   .reveal.is-visible {
@@ -528,6 +534,7 @@
     transform: translateY(0);
   }
   @media (prefers-reduced-motion: reduce) {
+    html.has-reveal .reveal:not(.is-visible),
     .reveal {
       opacity: 1;
       transform: none;
@@ -895,10 +902,38 @@
   @media (max-width: 991.98px) {
     .explorer-split {
       grid-template-columns: 1fr;
+      gap: 1.1rem;
+    }
+    .explorer-list {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 0.65rem;
+      padding: 0.65rem;
+      background-color: var(--vigan-surface);
+      border: 1px solid var(--vigan-border);
+    }
+    .explorer-row {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      border: 1px solid var(--vigan-border);
+      border-radius: var(--vigan-radius-sm);
+      background-color: var(--vigan-bg);
+      padding: 0.7rem 0.85rem;
+    }
+    .explorer-row:last-child {
+      border-block-end: 1px solid var(--vigan-border);
+    }
+    .explorer-row.is-active {
+      border-color: var(--vigan-accent);
+      box-shadow: inset 0 -3px 0 var(--vigan-accent);
+    }
+    .explorer-empty {
+      width: 100%;
     }
     .explorer-spotlight {
       position: static;
-      order: -1;
     }
     .spotlight-facts {
       grid-template-columns: 1fr;
@@ -1288,22 +1323,24 @@
   }
 
   .vigan-drawer {
+    --bs-drawer-inset: 0;
+    --drawer-inset: 0;
+    position: fixed;
+    inset-block: 0;
     width: min(100vw, 440px);
     max-width: 100vw;
     height: 100dvh;
     max-height: 100dvh;
-    margin-block: 0;
+    margin: 0;
     border-radius: 0;
   }
 
   .vigan-drawer.drawer-end {
-    margin-inline-start: auto;
-    margin-inline-end: 0;
+    inset-inline: auto 0;
   }
 
   .vigan-drawer.drawer-start {
-    margin-inline-start: 0;
-    margin-inline-end: auto;
+    inset-inline: 0 auto;
   }
 
   .vigan-drawer[open] {
@@ -1353,7 +1390,7 @@
     margin-block-end: 0.65rem;
   }
   .plan-status.is-error {
-    color: #b42318;
+    color: var(--vigan-error);
   }
 
   .plan-footer-actions {

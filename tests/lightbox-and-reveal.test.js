@@ -97,9 +97,11 @@ describe('reveal and nav spy (IntersectionObserver only)', () => {
     `;
 
     const callbacks = [];
+    const observedOptions = [];
     class FakeIO {
-      constructor(cb) {
+      constructor(cb, opts) {
         callbacks.push(cb);
+        observedOptions.push(opts);
       }
       observe() {}
       unobserve() {}
@@ -109,12 +111,16 @@ describe('reveal and nav spy (IntersectionObserver only)', () => {
     const sections = document.querySelectorAll('section');
     const links = document.querySelectorAll('nav a');
 
+    document.documentElement.classList.remove('has-reveal');
     initReveal({
       elements: sections,
       matchMedia: () => ({ matches: false }),
       IntersectionObserverCtor: FakeIO
     });
     initNavSpy({ links, sections, IntersectionObserverCtor: FakeIO });
+
+    expect(document.documentElement.classList.contains('has-reveal')).toBe(true);
+    expect(observedOptions[0].threshold).toBeLessThanOrEqual(0.02);
 
     // Trigger reveal callback
     callbacks[0]([{ isIntersecting: true, target: sections[0] }]);

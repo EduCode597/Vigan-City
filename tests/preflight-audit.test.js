@@ -75,6 +75,11 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     expect(css).toContain('@layer custom');
     expect(css).toContain('[data-bs-theme="dark"]');
     expect(css).toContain('prefers-reduced-motion');
+    expect(css).toContain('--bs-drawer-inset: 0');
+    expect(css).toContain('--vigan-error:');
+    expect(css).toContain('html.has-reveal .reveal:not(.is-visible)');
+    expect(css).not.toMatch(/\.plan-status\.is-error\s*\{[^}]*#b42318/i);
+    expect(html).not.toMatch(/id="explorerSpotlight"[^>]*aria-live="polite"/);
     expect(mainJs.length).toBeGreaterThan(100);
   });
 });

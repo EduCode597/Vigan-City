@@ -123,13 +123,42 @@ test.describe('Vigan City Editorial Explorer E2E', () => {
     await page.locator('#explorerList [data-reset-filters]').click();
     await expect(page.locator('#explorerList [data-place-row]')).toHaveCount(11);
 
-    // Open My Vigan Plan drawer -> load 1-Day preset -> count becomes 5
+    // Open My Vigan Plan drawer -> load 1-Day preset -> verify drawer & footer fit completely inside viewport
     await page.locator('#planTriggerBtn').click();
     await expect(page.locator('#planDrawer')).toHaveAttribute('open', '');
+    const drawerBox = await page.locator('#planDrawer').boundingBox();
+    const copyBox = await page.locator('#copyPlanBtn').boundingBox();
+    expect(drawerBox.y).toBe(0);
+    expect(copyBox.y + copyBox.height).toBeLessThanOrEqual(900);
+
     await page.locator('#planList [data-preset-id="one-day-classic"]').click();
     await expect(page.locator('#planTriggerBtn [data-plan-count]')).toHaveText('5');
     await page.locator('[data-close-drawer="planDrawer"]').click();
     await expect(page.locator('#planDrawer')).not.toHaveAttribute('open', '');
+
+    // Verify mobile drawer bounds and mobile explorer horizontal strip keeps spotlight visible
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('#mobileMenuBtn').click();
+    await expect(page.locator('#mobileNavDrawer')).toHaveAttribute('open', '');
+    await expect
+      .poll(async () => Math.round((await page.locator('#mobileNavDrawer').boundingBox()).x))
+      .toBe(0);
+    const mobileDrawerBox = await page.locator('#mobileNavDrawer').boundingBox();
+    expect(Math.round(mobileDrawerBox.y)).toBe(0);
+    expect(mobileDrawerBox.width).toBeLessThanOrEqual(390);
+    await page.locator('[data-close-drawer="mobileNavDrawer"]').first().click();
+    await expect(page.locator('#mobileNavDrawer')).not.toHaveAttribute('open', '');
+
+    await page.locator('#landmarks').scrollIntoViewIfNeeded();
+    await page.locator('#explorerList [data-select-place="syquia-mansion"]').click();
+    await expect(page.locator('#explorerSpotlight .spotlight-title')).toHaveText('Syquia Mansion Museum');
+    const mobileOverflowAfter = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+    );
+    expect(mobileOverflowAfter).toBe(false);
+
+    // Restore desktop viewport for lightbox & FAQ checks
+    await page.setViewportSize({ width: 1440, height: 900 });
 
     // Open Photo Archive Lightbox -> arrow navigation -> close
     await page.locator('#archiveGrid [data-gallery-index="0"]').click();

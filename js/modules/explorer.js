@@ -7,12 +7,53 @@ export function initExplorer({
   searchInput,
   listEl,
   spotlightEl,
+  statusEl = null,
   onOpenPlan = () => {}
 } = {}) {
   let activeCategory = 'all';
   let searchQuery = '';
   let activePlaceId = places[0]?.id || null;
   let nightModePhoto = false;
+
+  function announce(message) {
+    if (statusEl) statusEl.textContent = message;
+  }
+
+  function captureExplorerFocus() {
+    const active = document.activeElement;
+    if (!active) return null;
+    if (filtersEl && filtersEl.contains(active) && active.dataset.category) {
+      return { root: filtersEl, selector: `[data-category="${active.dataset.category}"]` };
+    }
+    if (listEl && listEl.contains(active)) {
+      if (active.dataset.savePlace) {
+        return { root: listEl, selector: `[data-save-place="${active.dataset.savePlace}"]` };
+      }
+      if (active.dataset.selectPlace) {
+        return { root: listEl, selector: `[data-select-place="${active.dataset.selectPlace}"]` };
+      }
+    }
+    if (spotlightEl && spotlightEl.contains(active)) {
+      if (active.hasAttribute('data-night-toggle')) {
+        return { root: spotlightEl, selector: '[data-night-toggle]' };
+      }
+      if (active.dataset.spotlightSave) {
+        return { root: spotlightEl, selector: `[data-spotlight-save="${active.dataset.spotlightSave}"]` };
+      }
+      if (active.hasAttribute('data-open-plan')) {
+        return { root: spotlightEl, selector: '[data-open-plan]' };
+      }
+    }
+    return null;
+  }
+
+  function restoreExplorerFocus(token) {
+    if (!token || !token.root) return;
+    const match = token.root.querySelector(token.selector);
+    if (match && typeof match.focus === 'function') {
+      match.focus({ preventScroll: true });
+    }
+  }
 
   function matchesFilters(place) {
     if (activeCategory !== 'all' && place.category !== activeCategory) {
@@ -209,7 +250,8 @@ export function initExplorer({
     spotlightEl.append(mediaWrap, body);
   }
 
-  function renderAll() {
+  function renderAll({ preserveFocus = true } = {}) {
+    const focusToken = preserveFocus ? captureExplorerFocus() : null;
     const filtered = getFilteredPlaces();
     if (filtered.length > 0 && !filtered.some((p) => p.id === activePlaceId)) {
       activePlaceId = filtered[0].id;
@@ -218,13 +260,16 @@ export function initExplorer({
     renderFilters();
     renderList(filtered);
     renderSpotlight();
+    if (focusToken) restoreExplorerFocus(focusToken);
   }
 
   function selectPlace(placeId) {
-    if (!places.some((p) => p.id === placeId)) return;
+    const place = places.find((p) => p.id === placeId);
+    if (!place) return;
     if (activePlaceId !== placeId) {
       activePlaceId = placeId;
       nightModePhoto = false;
+      announce(`Showing ${place.name}`);
     }
     renderAll();
   }
@@ -233,11 +278,13 @@ export function initExplorer({
     activeCategory = 'all';
     searchQuery = '';
     if (searchInput) searchInput.value = '';
-    renderAll();
+    announce('Showing all 11 places');
+    renderAll({ preserveFocus: false });
   }
 
   function selectAndFocusPlace(placeId) {
-    if (!places.some((p) => p.id === placeId)) return;
+    const place = places.find((p) => p.id === placeId);
+    if (!place) return;
     // Always ensure the clicked landmark from the hero loop is visible in the explorer.
     const currentlyVisible = getFilteredPlaces().some((p) => p.id === placeId);
     if (!currentlyVisible) {
@@ -247,7 +294,8 @@ export function initExplorer({
     }
     activePlaceId = placeId;
     nightModePhoto = false;
-    renderAll();
+    announce(`Showing ${place.name}`);
+    renderAll({ preserveFocus: false });
 
     if (sectionEl && typeof sectionEl.scrollIntoView === 'function') {
       sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -299,8 +347,10 @@ export function initExplorer({
     spotlightEl.addEventListener('click', (event) => {
       const nightBtn = event.target.closest('[data-night-toggle]');
       if (nightBtn) {
+        const focusToken = captureExplorerFocus();
         nightModePhoto = !nightModePhoto;
         renderSpotlight();
+        restoreExplorerFocus(focusToken);
         return;
       }
 

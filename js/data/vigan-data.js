@@ -220,7 +220,7 @@ export const PLACES = [
       'Spread across rolling coastal hills ten minutes south of the heritage core, Baluarte is Vigan\'s most popular family-friendly stop. Open grassy paddocks, wildlife encounters, life-sized Dinosaur Park sculptures, and breezy hillside viewing decks make it an easy contrast to the quiet museums downtown.',
     image: 'images/Landmarks/baluarte.jpg',
     alt: 'Open grassy grounds and hilltop stone terraces behind the Baluarte sign and dinosaur sculpture',
-    bestTime: '8:30 AM to 11:00 AM',
+    bestTime: '2:30 PM to 5:00 PM',
     durationMinutes: 90,
     durationLabel: '60 to 90 min',
     highlight: 'Hillside safari shuttle and family lawns',

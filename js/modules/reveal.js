@@ -26,6 +26,10 @@ export function initReveal({
     return;
   }
 
+  if (typeof document !== 'undefined' && document.documentElement) {
+    document.documentElement.classList.add('has-reveal');
+  }
+
   const observer = new IntersectionObserverCtor(
     (entries, obs) => {
       for (const entry of entries) {
@@ -37,7 +41,7 @@ export function initReveal({
         }
       }
     },
-    { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    { threshold: 0.01, rootMargin: '0px' }
   );
 
   for (const el of list) {

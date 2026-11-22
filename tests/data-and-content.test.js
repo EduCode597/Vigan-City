@@ -61,6 +61,11 @@ describe('Vigan data & content integrity', () => {
       expect([1, 2, 3, 4]).toContain(place.timeSlot);
       expect(['Morning', 'Midday', 'Afternoon', 'Evening']).toContain(place.timeSlotLabel);
       expect(place.alt.length).toBeGreaterThan(8);
+
+      // Ensure Afternoon/Evening slots do not contradict themselves with AM-only bestTime
+      if (place.timeSlotLabel === 'Afternoon' || place.timeSlotLabel === 'Evening') {
+        expect(place.bestTime, `Time slot mismatch on ${place.name}`).toMatch(/PM/i);
+      }
     }
   });
 

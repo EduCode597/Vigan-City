@@ -72,10 +72,18 @@ function writeSavedIds(storage, ids) {
   }
 }
 
+function getSafeLocalStorage() {
+  try {
+    return typeof window !== 'undefined' ? window.localStorage : null;
+  } catch {
+    return null;
+  }
+}
+
 export function createItineraryStore({
   places = [],
   presets = [],
-  storage = typeof window !== 'undefined' ? window.localStorage : null
+  storage = getSafeLocalStorage()
 } = {}) {
   const placeMap = new Map(places.map((p) => [p.id, p]));
   const validIds = new Set(placeMap.keys());
@@ -174,7 +182,44 @@ export function initItineraryDrawer({
     statusEl.classList.toggle('is-error', isError);
   }
 
+  function captureListFocus() {
+    const active = document.activeElement;
+    if (!active || !listEl || !listEl.contains(active)) return null;
+    if (active.hasAttribute('data-remove-stop')) {
+      const buttons = Array.from(listEl.querySelectorAll('[data-remove-stop]'));
+      return { kind: 'remove', index: buttons.indexOf(active) };
+    }
+    if (active.hasAttribute('data-preset-id')) {
+      return { kind: 'preset', id: active.dataset.presetId };
+    }
+    return null;
+  }
+
+  function restoreListFocus(token) {
+    if (!token || !listEl) return;
+    if (token.kind === 'remove') {
+      const remaining = Array.from(listEl.querySelectorAll('[data-remove-stop]'));
+      if (remaining.length > 0) {
+        const nextBtn = remaining[Math.min(token.index, remaining.length - 1)];
+        nextBtn?.focus();
+        return;
+      }
+      const firstPreset = listEl.querySelector('[data-preset-id]');
+      if (firstPreset) {
+        firstPreset.focus();
+        return;
+      }
+      drawerEl?.querySelector('.btn-close')?.focus();
+    } else if (token.kind === 'preset') {
+      const nextTarget =
+        listEl.querySelector('[data-remove-stop]') ||
+        listEl.querySelector(`[data-preset-id="${token.id}"]`);
+      nextTarget?.focus();
+    }
+  }
+
   function render() {
+    const focusToken = captureListFocus();
     const savedPlaces = store.getSavedPlaces();
     const totalCount = savedPlaces.length;
     const totalMins = savedPlaces.reduce((sum, p) => sum + (p.durationMinutes || 0), 0);
@@ -230,6 +275,7 @@ export function initItineraryDrawer({
 
       empty.append(heading, copy, presetWrap);
       listEl.appendChild(empty);
+      restoreListFocus(focusToken);
       return;
     }
 
@@ -285,6 +331,7 @@ export function initItineraryDrawer({
       switchWrap.appendChild(btn);
     }
     listEl.appendChild(switchWrap);
+    restoreListFocus(focusToken);
   }
 
   function openDrawer() {

@@ -255,6 +255,7 @@ function bootstrapApp() {
     searchInput: document.getElementById('explorerSearch'),
     listEl: document.getElementById('explorerList'),
     spotlightEl: document.getElementById('explorerSpotlight'),
+    statusEl: document.getElementById('explorerStatus'),
     onOpenPlan: () => planDrawerApi.openDrawer()
   });
 

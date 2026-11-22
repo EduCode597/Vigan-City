@@ -122,6 +122,48 @@ describe('itinerary store and drawer', () => {
     expect(store.getSavedIds()).toEqual([]);
   });
 
+  it('survives window.localStorage getter throwing SecurityError when default storage param is used', () => {
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'localStorage');
+    Object.defineProperty(window, 'localStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('Storage getter blocked', 'SecurityError');
+      }
+    });
+
+    try {
+      let store;
+      expect(() => {
+        store = createItineraryStore({ places: PLACES, presets: TRIP_PRESETS });
+      }).not.toThrow();
+      expect(store.getSavedIds()).toEqual([]);
+      expect(() => store.toggleStop('calle-crisologo')).not.toThrow();
+      expect(store.getSavedIds()).toEqual(['calle-crisologo']);
+    } finally {
+      if (descriptor) {
+        Object.defineProperty(window, 'localStorage', descriptor);
+      }
+    }
+  });
+
+  it('restores keyboard focus cleanly inside the drawer when removing a stop', () => {
+    const storage = createMemoryStorage();
+    const store = createItineraryStore({ places: PLACES, presets: TRIP_PRESETS, storage });
+    store.applyPreset('one-day-classic');
+    const dom = createDrawerDom();
+
+    initItineraryDrawer({ store, presets: TRIP_PRESETS, ...dom });
+
+    const firstRemove = dom.listEl.querySelector('[data-remove-stop]');
+    firstRemove.focus();
+    expect(document.activeElement).toBe(firstRemove);
+    firstRemove.click();
+
+    // Focus must stay inside #planList on the next remove button instead of falling to document.body
+    expect(document.activeElement).not.toBe(document.body);
+    expect(document.activeElement.hasAttribute('data-remove-stop')).toBe(true);
+  });
+
   it('renders empty state with one-click preset buttons and updates when presets or removals run', () => {
     const storage = createMemoryStorage();
     const store = createItineraryStore({ places: PLACES, presets: TRIP_PRESETS, storage });
