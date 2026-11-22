@@ -80,8 +80,14 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     expect(css).toContain('--bs-drawer-inset: 0');
     expect(css).toContain('--vigan-error:');
     expect(css).toContain('html.has-reveal .reveal:not(.is-visible)');
+    expect(css).toContain(':not([open])');
     expect(css).not.toMatch(/\.plan-status\.is-error\s*\{[^}]*#b42318/i);
     expect(html).not.toMatch(/id="explorerSpotlight"[^>]*aria-live="polite"/);
+    expect(html).toContain('@EduCode597');
+    expect(html).toContain('PUP Sto. Tomas');
+    expect(html).toContain('https://educode597.github.io/');
+    expect(html).toContain('https://github.com/EduCode597');
+    expect(html).toContain('mailto:educode597@gmail.com');
     expect(mainJs.length).toBeGreaterThan(100);
   });
 });
