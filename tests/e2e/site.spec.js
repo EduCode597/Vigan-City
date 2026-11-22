@@ -38,18 +38,30 @@ test.describe('Vigan City Editorial Explorer E2E', () => {
 
     expect(brokenImages).toEqual([]);
 
-    // No horizontal overflow at desktop
-    const desktopOverflow = await page.evaluate(
-      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
-    );
-    expect(desktopOverflow).toBe(false);
+    // No horizontal overflow and zero whitespace gap below footer at desktop
+    const desktopLayout = await page.evaluate(() => {
+      const footer = document.getElementById('siteFooter');
+      const footerBottom = footer.getBoundingClientRect().bottom + window.scrollY;
+      return {
+        horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        gapBelowFooter: Math.round(document.documentElement.scrollHeight - footerBottom)
+      };
+    });
+    expect(desktopLayout.horizontalOverflow).toBe(false);
+    expect(desktopLayout.gapBelowFooter).toBeLessThanOrEqual(1);
 
-    // No horizontal overflow at mobile 390px
+    // No horizontal overflow and zero whitespace gap below footer at mobile 390px
     await page.setViewportSize({ width: 390, height: 844 });
-    const mobileOverflow = await page.evaluate(
-      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
-    );
-    expect(mobileOverflow).toBe(false);
+    const mobileLayout = await page.evaluate(() => {
+      const footer = document.getElementById('siteFooter');
+      const footerBottom = footer.getBoundingClientRect().bottom + window.scrollY;
+      return {
+        horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        gapBelowFooter: Math.round(document.documentElement.scrollHeight - footerBottom)
+      };
+    });
+    expect(mobileLayout.horizontalOverflow).toBe(false);
+    expect(mobileLayout.gapBelowFooter).toBeLessThanOrEqual(1);
 
     expect(errors).toEqual([]);
   });
