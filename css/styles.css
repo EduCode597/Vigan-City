@@ -368,26 +368,6 @@
     gap: 0.85rem;
   }
 
-  .marquee-toggle-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.42rem;
-    font-family: var(--vigan-font-mono);
-    font-size: 0.76rem;
-    font-weight: 500;
-    background-color: var(--vigan-bg);
-    color: var(--vigan-ink);
-    border: 1px solid var(--vigan-border);
-    padding: 0.48rem 0.85rem;
-    border-radius: var(--vigan-radius);
-    cursor: pointer;
-    transition: border-color 0.16s ease, background-color 0.16s ease;
-  }
-  .marquee-toggle-btn:hover {
-    border-color: var(--vigan-accent);
-    background-color: var(--vigan-surface-alt);
-  }
-
   /* Seamless Right-to-Left Auto-Sliding Loop */
   .marquee-viewport {
     position: relative;
@@ -404,9 +384,8 @@
     will-change: transform;
   }
 
-  /* Pause cleanly on hover or explicit toggle (never trapped by click focus) */
-  .marquee-viewport:hover .marquee-track,
-  .marquee-viewport.is-paused .marquee-track {
+  /* Pause cleanly whenever the user hovers over the cards */
+  .marquee-viewport:hover .marquee-track {
     animation-play-state: paused;
   }
 
@@ -427,20 +406,20 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .marquee-viewport:not(.force-motion) {
+    .marquee-viewport {
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       mask-image: none;
       -webkit-mask-image: none;
       padding-inline: clamp(1.25rem, 3.2vw, 2.5rem);
     }
-    .marquee-viewport:not(.force-motion) .marquee-track {
+    .marquee-viewport .marquee-track {
       animation: none;
     }
-    .marquee-viewport:not(.force-motion) .marquee-group[aria-hidden="true"] {
+    .marquee-viewport .marquee-group[aria-hidden="true"] {
       display: none;
     }
-    .marquee-viewport:not(.force-motion) .place-slide {
+    .marquee-viewport .place-slide {
       scroll-snap-align: start;
     }
   }

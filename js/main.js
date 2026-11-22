@@ -262,7 +262,6 @@ function bootstrapApp() {
   initMarquee({
     viewport: document.getElementById('marqueeViewport'),
     track: document.getElementById('marqueeTrack'),
-    toggleBtn: document.getElementById('marqueeToggle'),
     places: HERO_PLACES,
     onSelectPlace: (placeId) => explorerApi.selectAndFocusPlace(placeId)
   });

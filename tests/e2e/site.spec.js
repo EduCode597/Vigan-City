@@ -69,12 +69,15 @@ test.describe('Vigan City Editorial Explorer E2E', () => {
     await expect(page.locator('html')).toHaveAttribute('data-bs-theme', expectedNext);
   });
 
-  test('auto-sliding hero marquee shows 11 places only, moves right-to-left, supports pause/play, and jumps to clicked landmark', async ({
+  test('auto-sliding hero marquee shows 11 places only, moves right-to-left, pauses on hover, and jumps to clicked landmark', async ({
     page
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.goto('/');
+
+    // No play/pause toggle button in hero
+    await expect(page.locator('#marqueeToggle')).toHaveCount(0);
 
     const track = page.locator('#marqueeTrack');
     const animName = await track.evaluate((el) => getComputedStyle(el).animationName);
@@ -89,22 +92,19 @@ test.describe('Vigan City Editorial Explorer E2E', () => {
     const boxAfter = await bantayBtn.boundingBox();
     expect(boxAfter.x).toBeLessThan(boxBefore.x);
 
-    // Toggle pause and resume, confirming pause stabilizes card position
-    const toggleBtn = page.locator('#marqueeToggle');
-    await toggleBtn.click();
-    await expect(page.locator('#marqueeViewport')).toHaveClass(/is-paused/);
+    // Hovering over the marquee pauses the sliding animation
+    await page.locator('#marqueeViewport').hover();
+    const playStateOnHover = await track.evaluate((el) => getComputedStyle(el).animationPlayState);
+    expect(playStateOnHover).toBe('paused');
+
     const pausedX1 = (await bantayBtn.boundingBox()).x;
-    await page.waitForTimeout(200);
+    await page.waitForTimeout(250);
     const pausedX2 = (await bantayBtn.boundingBox()).x;
     expect(Math.abs(pausedX2 - pausedX1)).toBeLessThan(1);
 
-    // Click Bantay Bell Tower while paused -> selects it in Landmark Explorer
+    // Clicking Bantay Bell Tower while hovered selects it in Landmark Explorer
     await bantayBtn.click();
     await expect(page.locator('#explorerSpotlight .spotlight-title')).toHaveText('Bantay Bell Tower');
-
-    // Resume loop cleanly
-    await toggleBtn.click();
-    await expect(page.locator('#marqueeViewport')).not.toHaveClass(/is-paused/);
   });
 
   test('supports Explorer filter/search, My Vigan Plan Drawer presets, Photo Lightbox keyboard nav, and native FAQ', async ({

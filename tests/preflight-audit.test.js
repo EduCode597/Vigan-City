@@ -67,9 +67,11 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     const eyebrowMatches = html.match(/class="[^"]*\bvigan-eyebrow\b[^"]*"/g) || [];
     expect(eyebrowMatches.length).toBeLessThanOrEqual(2);
 
-    // Single marquee only
+    // Single marquee only, with no play/pause toggle button (hover pauses sliding)
     const marqueeMatches = html.match(/class="[^"]*\bmarquee-viewport\b[^"]*"/g) || [];
     expect(marqueeMatches.length).toBe(1);
+    expect(html).not.toContain('id="marqueeToggle"');
+    expect(css).toContain('.marquee-viewport:hover .marquee-track');
 
     // CSS uses @layer custom for Bootstrap 6 layer interoperability
     expect(css).toContain('@layer custom');
