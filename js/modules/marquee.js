@@ -38,81 +38,17 @@ function buildGroup(places, isClone) {
 export function initMarquee({
   viewport,
   track,
-  toggleBtn,
   places = [],
-  onSelectPlace = () => {},
-  matchMedia = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
-    ? window.matchMedia.bind(window)
-    : null
+  onSelectPlace = () => {}
 } = {}) {
-  if (!viewport || !track) {
-    return {
-      isPaused: () => true,
-      setPaused: () => {},
-      togglePaused: () => {}
-    };
-  }
+  if (!viewport || !track) return;
 
   track.innerHTML = '';
   track.append(buildGroup(places, false), buildGroup(places, true));
-
-  let prefersReduced = false;
-  if (matchMedia) {
-    try {
-      prefersReduced = Boolean(matchMedia('(prefers-reduced-motion: reduce)').matches);
-    } catch {
-      prefersReduced = false;
-    }
-  }
-
-  let paused = prefersReduced;
-
-  function syncUi() {
-    viewport.classList.toggle('is-paused', paused);
-    viewport.classList.toggle('force-motion', prefersReduced && !paused);
-
-    if (toggleBtn) {
-      toggleBtn.setAttribute('aria-pressed', String(paused));
-      const labelEl = toggleBtn.querySelector('[data-marquee-label]');
-      const labelText = paused ? 'Play loop' : 'Pause loop';
-      if (labelEl) {
-        labelEl.textContent = labelText;
-      } else {
-        toggleBtn.textContent = labelText;
-      }
-
-      const iconEl = toggleBtn.querySelector('[data-marquee-icon]');
-      if (iconEl) {
-        iconEl.classList.toggle('ph-play', paused);
-        iconEl.classList.toggle('ph-pause', !paused);
-      }
-    }
-  }
-
-  function setPaused(nextPaused) {
-    paused = Boolean(nextPaused);
-    syncUi();
-  }
-
-  function togglePaused() {
-    setPaused(!paused);
-  }
 
   track.addEventListener('click', (event) => {
     const slide = event.target.closest('.place-slide');
     if (!slide || !slide.dataset.placeId) return;
     onSelectPlace(slide.dataset.placeId);
   });
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => togglePaused());
-  }
-
-  syncUi();
-
-  return {
-    isPaused: () => paused,
-    setPaused,
-    togglePaused
-  };
 }

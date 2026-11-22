@@ -255,13 +255,13 @@ function bootstrapApp() {
     searchInput: document.getElementById('explorerSearch'),
     listEl: document.getElementById('explorerList'),
     spotlightEl: document.getElementById('explorerSpotlight'),
+    statusEl: document.getElementById('explorerStatus'),
     onOpenPlan: () => planDrawerApi.openDrawer()
   });
 
   initMarquee({
     viewport: document.getElementById('marqueeViewport'),
     track: document.getElementById('marqueeTrack'),
-    toggleBtn: document.getElementById('marqueeToggle'),
     places: HERO_PLACES,
     onSelectPlace: (placeId) => explorerApi.selectAndFocusPlace(placeId)
   });

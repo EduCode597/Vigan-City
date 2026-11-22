@@ -67,14 +67,21 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     const eyebrowMatches = html.match(/class="[^"]*\bvigan-eyebrow\b[^"]*"/g) || [];
     expect(eyebrowMatches.length).toBeLessThanOrEqual(2);
 
-    // Single marquee only
+    // Single marquee only, with no play/pause toggle button (hover pauses sliding)
     const marqueeMatches = html.match(/class="[^"]*\bmarquee-viewport\b[^"]*"/g) || [];
     expect(marqueeMatches.length).toBe(1);
+    expect(html).not.toContain('id="marqueeToggle"');
+    expect(css).toContain('.marquee-viewport:hover .marquee-track');
 
     // CSS uses @layer custom for Bootstrap 6 layer interoperability
     expect(css).toContain('@layer custom');
     expect(css).toContain('[data-bs-theme="dark"]');
     expect(css).toContain('prefers-reduced-motion');
+    expect(css).toContain('--bs-drawer-inset: 0');
+    expect(css).toContain('--vigan-error:');
+    expect(css).toContain('html.has-reveal .reveal:not(.is-visible)');
+    expect(css).not.toMatch(/\.plan-status\.is-error\s*\{[^}]*#b42318/i);
+    expect(html).not.toMatch(/id="explorerSpotlight"[^>]*aria-live="polite"/);
     expect(mainJs.length).toBeGreaterThan(100);
   });
 });

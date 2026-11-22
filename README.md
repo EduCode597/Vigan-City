@@ -6,8 +6,8 @@ Live site: <https://educode597.github.io/Vigan-City/>
 
 ## Highlights
 
-- **Auto-Sliding 11-Place Hero Loop:** Seamless right-to-left showcase of all 11 physical landmarks around Vigan (pauses on hover, includes an explicit Play/Pause control, honors `prefers-reduced-motion` with opt-in playback, and jumps straight to the selected landmark on click).
-- **Why Vigan Is Famous:** Concise breakdown of Vigan's UNESCO 1999 inscription, New7Wonders City recognition, and preserved 16th-century *bahay na bato* architecture.
+- **Auto-Sliding 11-Place Hero Loop:** Seamless right-to-left showcase of all 11 physical landmarks around Vigan that pauses automatically whenever you hover over the cards and jumps straight to the clicked landmark in the explorer.
+- **Why Vigan Is Famous:** Concise breakdown of Vigan's UNESCO 1999 inscription, New7Wonders City recognition, and preserved 16th-century _bahay na bato_ architecture.
 - **Interactive Split-Screen Landmark Explorer:** Filter by area, search by keyword, toggle Calle Crisologo's Day and Night photography, and save stops directly to your trip.
 - **My Vigan Plan Drawer:** Built on Bootstrap 6's native `<dialog class="drawer">`, sorting saved stops chronologically from Morning to Evening with estimated time, curated 1-day and 2-day presets, `localStorage` persistence, and clipboard itinerary copy.
 - **Food & Living Crafts:** Dedicated stories for Abel Iloko handloom weaving, burnay stoneware pottery, Vigan empanada, crispy bagnet, and garlicky Vigan longganisa.

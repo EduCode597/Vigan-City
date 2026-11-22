@@ -4,22 +4,14 @@ import { initMarquee } from '../js/modules/marquee.js';
 
 function createMarqueeDom() {
   document.body.innerHTML = `
-    <button type="button" id="marqueeToggle" aria-pressed="false">Pause loop</button>
     <div class="marquee-viewport" id="marqueeViewport">
       <div class="marquee-track" id="marqueeTrack"></div>
     </div>
   `;
   return {
     viewport: document.getElementById('marqueeViewport'),
-    track: document.getElementById('marqueeTrack'),
-    toggleBtn: document.getElementById('marqueeToggle')
+    track: document.getElementById('marqueeTrack')
   };
-}
-
-function mockReducedMotion(reduced) {
-  return (query) => ({
-    matches: query === '(prefers-reduced-motion: reduce)' ? reduced : false
-  });
 }
 
 describe('hero auto-sliding places marquee', () => {
@@ -32,8 +24,7 @@ describe('hero auto-sliding places marquee', () => {
     initMarquee({
       ...dom,
       places: HERO_PLACES,
-      onSelectPlace: vi.fn(),
-      matchMedia: mockReducedMotion(false)
+      onSelectPlace: vi.fn()
     });
 
     const groups = dom.track.querySelectorAll('.marquee-group');
@@ -63,8 +54,7 @@ describe('hero auto-sliding places marquee', () => {
     initMarquee({
       ...dom,
       places: HERO_PLACES,
-      onSelectPlace,
-      matchMedia: mockReducedMotion(false)
+      onSelectPlace
     });
 
     const primaryBantay = dom.track.querySelector('.marquee-group:first-child [data-place-id="bantay-bell-tower"]');
@@ -75,52 +65,5 @@ describe('hero auto-sliding places marquee', () => {
 
     expect(onSelectPlace).toHaveBeenNthCalledWith(1, 'bantay-bell-tower');
     expect(onSelectPlace).toHaveBeenNthCalledWith(2, 'syquia-mansion');
-  });
-
-  it('toggles pause and resume cleanly when motion is enabled by OS', () => {
-    const dom = createMarqueeDom();
-    const api = initMarquee({
-      ...dom,
-      places: HERO_PLACES,
-      onSelectPlace: vi.fn(),
-      matchMedia: mockReducedMotion(false)
-    });
-
-    expect(api.isPaused()).toBe(false);
-    expect(dom.viewport.classList.contains('is-paused')).toBe(false);
-    expect(dom.toggleBtn.getAttribute('aria-pressed')).toBe('false');
-    expect(dom.toggleBtn.textContent).toContain('Pause');
-
-    dom.toggleBtn.click();
-    expect(api.isPaused()).toBe(true);
-    expect(dom.viewport.classList.contains('is-paused')).toBe(true);
-    expect(dom.toggleBtn.getAttribute('aria-pressed')).toBe('true');
-    expect(dom.toggleBtn.textContent).toContain('Play');
-
-    dom.toggleBtn.click();
-    expect(api.isPaused()).toBe(false);
-    expect(dom.viewport.classList.contains('is-paused')).toBe(false);
-    expect(dom.toggleBtn.textContent).toContain('Pause');
-  });
-
-  it('starts paused under prefers-reduced-motion and enables force-motion when user explicitly clicks Play loop', () => {
-    const dom = createMarqueeDom();
-    const api = initMarquee({
-      ...dom,
-      places: HERO_PLACES,
-      onSelectPlace: vi.fn(),
-      matchMedia: mockReducedMotion(true)
-    });
-
-    expect(api.isPaused()).toBe(true);
-    expect(dom.viewport.classList.contains('is-paused')).toBe(true);
-    expect(dom.viewport.classList.contains('force-motion')).toBe(false);
-    expect(dom.toggleBtn.textContent).toContain('Play');
-
-    dom.toggleBtn.click();
-    expect(api.isPaused()).toBe(false);
-    expect(dom.viewport.classList.contains('is-paused')).toBe(false);
-    expect(dom.viewport.classList.contains('force-motion')).toBe(true);
-    expect(dom.toggleBtn.textContent).toContain('Pause');
   });
 });

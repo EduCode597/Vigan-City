@@ -74,6 +74,36 @@ describe('theme module', () => {
     expect(document.documentElement.dataset.bsTheme).toBe('dark');
   });
 
+  it('survives window.localStorage getter throwing SecurityError when default storage param is used', () => {
+    const descriptor = Object.getOwnPropertyDescriptor(window, 'localStorage');
+    Object.defineProperty(window, 'localStorage', {
+      configurable: true,
+      get() {
+        throw new DOMException('Storage getter blocked', 'SecurityError');
+      }
+    });
+
+    try {
+      expect(() => resolveInitialTheme({ matchMedia: mockMatchMedia(true) })).not.toThrow();
+      expect(resolveInitialTheme({ matchMedia: mockMatchMedia(true) })).toBe('dark');
+
+      const btn = document.createElement('button');
+      document.body.appendChild(btn);
+      const api = initTheme({
+        root: document.documentElement,
+        toggleButtons: [btn],
+        matchMedia: mockMatchMedia(false)
+      });
+      expect(api.getTheme()).toBe('light');
+      expect(() => btn.click()).not.toThrow();
+      expect(api.getTheme()).toBe('dark');
+    } finally {
+      if (descriptor) {
+        Object.defineProperty(window, 'localStorage', descriptor);
+      }
+    }
+  });
+
   it('applies data-bs-theme and syncs button labels, aria-pressed, and persistence on toggle', () => {
     const storage = createMemoryStorage();
     const btn = document.createElement('button');

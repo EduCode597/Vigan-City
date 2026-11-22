@@ -2,6 +2,14 @@ export const THEME_STORAGE_KEY = 'vigan-theme';
 
 const VALID_THEMES = new Set(['light', 'dark']);
 
+function getSafeLocalStorage() {
+  try {
+    return typeof window !== 'undefined' ? window.localStorage : null;
+  } catch {
+    return null;
+  }
+}
+
 function readSavedTheme(storage) {
   if (!storage) return null;
   try {
@@ -22,7 +30,7 @@ function writeSavedTheme(storage, theme) {
 }
 
 export function resolveInitialTheme({
-  storage = typeof window !== 'undefined' ? window.localStorage : null,
+  storage = getSafeLocalStorage(),
   matchMedia = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     ? window.matchMedia.bind(window)
     : null
@@ -80,7 +88,7 @@ export function applyTheme(
 export function initTheme({
   root = document.documentElement,
   toggleButtons = [],
-  storage = typeof window !== 'undefined' ? window.localStorage : null,
+  storage = getSafeLocalStorage(),
   matchMedia = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     ? window.matchMedia.bind(window)
     : null
