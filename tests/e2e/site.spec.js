@@ -105,6 +105,20 @@ test.describe('Vigan City Editorial Explorer E2E', () => {
     // Clicking Bantay Bell Tower while hovered selects it in Landmark Explorer
     await bantayBtn.click();
     await expect(page.locator('#explorerSpotlight .spotlight-title')).toHaveText('Bantay Bell Tower');
+
+    // Also confirm cards continue sliding smoothly when OS sets prefers-reduced-motion: reduce
+    // (common on Windows when system window-animation effects are disabled) and still pause on hover
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.mouse.move(10, 10);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const reducedX1 = (await bantayBtn.boundingBox()).x;
+    await page.waitForTimeout(350);
+    const reducedX2 = (await bantayBtn.boundingBox()).x;
+    expect(reducedX2).toBeLessThan(reducedX1);
+
+    await page.locator('#marqueeViewport').hover();
+    const reducedHoverState = await track.evaluate((el) => getComputedStyle(el).animationPlayState);
+    expect(reducedHoverState).toBe('paused');
   });
 
   test('supports Explorer filter/search, My Vigan Plan Drawer presets, Photo Lightbox keyboard nav, and native FAQ', async ({

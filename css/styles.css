@@ -380,7 +380,7 @@
   .marquee-track {
     display: flex;
     width: max-content;
-    animation: viganPlacesSlide 52s linear infinite;
+    animation: viganPlacesSlide 44s linear infinite;
     will-change: transform;
   }
 
@@ -402,25 +402,6 @@
     }
     100% {
       transform: translate3d(-50%, 0, 0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .marquee-viewport {
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      mask-image: none;
-      -webkit-mask-image: none;
-      padding-inline: clamp(1.25rem, 3.2vw, 2.5rem);
-    }
-    .marquee-viewport .marquee-track {
-      animation: none;
-    }
-    .marquee-viewport .marquee-group[aria-hidden="true"] {
-      display: none;
-    }
-    .marquee-viewport .place-slide {
-      scroll-snap-align: start;
     }
   }
 
