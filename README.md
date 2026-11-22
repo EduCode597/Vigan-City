@@ -1,117 +1,78 @@
-# Vigan Heritage Escape  
+# Vigan City - Living Heritage & Travel Explorer
 
-A single-page tourism website showcasing the charm of Vigan City, created with Bootstrap, HTML, CSS, and JavaScript.
+A minimalist, Bootstrap 6 editorial travel website showcasing Vigan City, Ilocos Sur: its 11 most-visited landmarks, UNESCO World Heritage history, Ilocano cuisine and living crafts, a captioned photo archive, and a personal Vigan day-plan builder.
 
-## Table of Contents  
+Live site: <https://educode597.github.io/Vigan-City/>
 
-- [Overview](#overview)  
-- [Features](#features)  
-- [Technologies Used](#technologies-used)  
-- [Getting Started](#getting-started)  
-  - [Prerequisites](#prerequisites)  
-  - [Installation](#installation)  
-  - [Deployment](#deployment)  
-- [Project Structure](#project-structure)  
-- [Credits and License](#credits-and-license)  
+## Highlights
 
-## Overview  
-
-Vigan Heritage Escape is designed to guide visitors through the historic and cultural highlights of Vigan City: from colonial architecture and cobblestone streets to Ilocano cuisine and lively cultural scenes. The site aims to provide an engaging, responsive experience for desktop and mobile users alike.
-
-On the site you’ll find:  
-
-- An “About” section with a brief history and introduction to Vigan City  
-- A “Top Attractions” section highlighting key landmarks (e.g., Calle Crisologo, Plaza Salcedo, St. Paul Cathedral)  
-- A “Culture & Cuisine” section with local specialties like longganisa, empanada and bagnet  
-- A “Gallery” section with images of city scenes, heritage houses, night views  
-- A “Plan Your Visit” section with practical information on best time to visit, how to get there, where to stay  
-
-## Features  
-
-- Fully responsive design using Bootstrap  
-- Smooth scroll navigation between sections  
-- Image carousel/slider for showcasing visuals  
-- Clean and semantic HTML5 and CSS3 styling  
-- Minimal JavaScript for interactive elements (e.g., carousel controls)  
-- Deployed via GitHub Pages for easy hosting  
-
-## Technologies Used  
-
-- HTML5  
-- CSS3 (including Bootstrap classes)  
-- JavaScript (vanilla)  
-- Bootstrap (version X.X)  
-- Git / GitHub for version control and deployment  
-- GitHub Pages for hosting  
-
-## Getting Started  
-
-### Prerequisites  
-
-- A modern web browser (Chrome, Firefox, Edge, Safari)  
-- Git installed (optional, for cloning repository)  
-
-### Installation  
-
-1. Clone the repository:  
-
-   ```bash  
-   git clone https://github.com/educode597/Vigan-City.git  
-2. Navigate to the project folder:
-
-   ```bash
-   cd Vigan-City  
-3. Open index.html in your web browser to view the site locally.
-
-## Deployment
-
-Deployment
-
-- The site is designed for deployment via GitHub Pages:
-
-1. Push your changes to the main (or gh-pages) branch on GitHub.
-2. In the repository Settings > Pages, select the source branch and folder (/ (root) or /docs).
-3. Wait a few minutes for GitHub to build and publish the page.
-4. Access the site at: <https://educode597.github.io/Vigan-City/>
+- **Auto-Sliding 11-Place Hero Loop:** Seamless right-to-left showcase of all 11 physical landmarks around Vigan (pauses on hover, includes an explicit Play/Pause control, honors `prefers-reduced-motion` with opt-in playback, and jumps straight to the selected landmark on click).
+- **Why Vigan Is Famous:** Concise breakdown of Vigan's UNESCO 1999 inscription, New7Wonders City recognition, and preserved 16th-century *bahay na bato* architecture.
+- **Interactive Split-Screen Landmark Explorer:** Filter by area, search by keyword, toggle Calle Crisologo's Day and Night photography, and save stops directly to your trip.
+- **My Vigan Plan Drawer:** Built on Bootstrap 6's native `<dialog class="drawer">`, sorting saved stops chronologically from Morning to Evening with estimated time, curated 1-day and 2-day presets, `localStorage` persistence, and clipboard itinerary copy.
+- **Food & Living Crafts:** Dedicated stories for Abel Iloko handloom weaving, burnay stoneware pottery, Vigan empanada, crispy bagnet, and garlicky Vigan longganisa.
+- **Captioned Photo Archive & Lightbox:** Every photo carries a visible caption below the frame and opens in a keyboard-accessible Bootstrap 6 `<dialog>` viewer.
+- **Dual Light & Dark Mode:** Cool Slate neutrals with a single Kiln Terracotta accent powered by `[data-bs-theme]` and persisted in `localStorage`.
 
 ## Project Structure
 
+```text
 Vigan-City/
-│
-├── index.html          ← Main HTML file  
-├── css/                ← Custom CSS files  
-│   └── style.css  
-├── js/                 ← JavaScript files  
-│   └── main.js  
-├── img/                ← Images used in the site (gallery, attractions, etc.)  
-└── README.md           ← This documentation file  
+├── index.html
+├── Icon.svg
+├── css/
+│   └── styles.css
+├── js/
+│   ├── main.js
+│   ├── data/
+│   │   └── vigan-data.js
+│   └── modules/
+│       ├── theme.js
+│       ├── marquee.js
+│       ├── itinerary.js
+│       ├── explorer.js
+│       ├── lightbox.js
+│       └── reveal.js
+├── images/
+│   ├── Landmarks/
+│   ├── attractions/
+│   ├── carousel/
+│   ├── cuisine/
+│   └── gallery/
+└── tests/
+    ├── data-and-content.test.js
+    ├── theme.test.js
+    ├── marquee.test.js
+    ├── itinerary.test.js
+    ├── explorer.test.js
+    ├── lightbox-and-reveal.test.js
+    ├── preflight-audit.test.js
+    └── e2e/
+        └── site.spec.js
+```
 
-## Credits and License
+## Local Development & Deployment
 
-- Website developed by John Eduard Madriaga (© 2025)
-- Images:
-Images sourced from Pinterest. All copyrights belong to their respective owners.
-Images are used only for educational and non-commercial purposes.
-- Built with Bootstrap (<https://getbootstrap.com>)
-- License:
-  MIT License
+The site requires **no build step** for hosting or GitHub Pages. Serve the repository root with any static HTTP server (needed for ES modules):
 
-Copyright (c) 2025 John Eduard Madriaga
+```bash
+npx vite --port 4173
+```
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including, without limitation, the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Or deploy directly via GitHub Pages from the repository root (`/`).
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## Automated Tests
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+```bash
+# Unit, DOM, content integrity, and pre-flight audit tests
+npm test
+
+# End-to-end headless browser tests
+npm run test:e2e
+```
+
+## Credits & License
+
+- Originally created by **John Eduard Madriaga**
+- Built with Bootstrap 6 (`6.0.0-alpha.1`) and Phosphor Icons
+- Licensed under the MIT License
