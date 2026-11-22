@@ -1,0 +1,17 @@
+{
+  "name": "vigan-city",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimalist Bootstrap 6 editorial travel explorer for Vigan City, Ilocos Sur",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "jsdom": "^29.1.1",
+    "vitest": "^5.1.1"
+  }
+}

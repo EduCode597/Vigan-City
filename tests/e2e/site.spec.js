@@ -1,0 +1,148 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Vigan City Editorial Explorer E2E', () => {
+  test('loads cleanly with zero console/page errors, all images rendered, and zero horizontal overflow', async ({
+    page
+  }) => {
+    const errors = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Wait for modules and images to settle
+    await expect(page.locator('#marqueeTrack .place-slide')).toHaveCount(22);
+    await expect(page.locator('#explorerList [data-place-row]')).toHaveCount(11);
+    await expect(page.locator('#archiveGrid [data-gallery-index]')).toHaveCount(6);
+
+    // Confirm all visible images loaded with naturalWidth > 0
+    const brokenImages = await page.evaluate(async () => {
+      const imgs = Array.from(document.querySelectorAll('img')).filter(
+        (img) => img.getAttribute('src') && !img.closest('dialog:not([open])')
+      );
+      await Promise.all(
+        imgs.map((img) => {
+          img.loading = 'eager';
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve) => {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+          });
+        })
+      );
+      return imgs.filter((img) => img.naturalWidth === 0).map((img) => img.getAttribute('src'));
+    });
+
+    expect(brokenImages).toEqual([]);
+
+    // No horizontal overflow at desktop
+    const desktopOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+    );
+    expect(desktopOverflow).toBe(false);
+
+    // No horizontal overflow at mobile 390px
+    await page.setViewportSize({ width: 390, height: 844 });
+    const mobileOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+    );
+    expect(mobileOverflow).toBe(false);
+
+    expect(errors).toEqual([]);
+  });
+
+  test('toggles Light and Dark themes and persists preference across reloads', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/');
+
+    const themeBtn = page.locator('header [data-theme-toggle]');
+    const initialTheme = await page.evaluate(() => document.documentElement.dataset.bsTheme);
+    const expectedNext = initialTheme === 'dark' ? 'light' : 'dark';
+
+    await themeBtn.click();
+    await expect(page.locator('html')).toHaveAttribute('data-bs-theme', expectedNext);
+
+    await page.reload();
+    await expect(page.locator('html')).toHaveAttribute('data-bs-theme', expectedNext);
+  });
+
+  test('auto-sliding hero marquee shows 11 places only, moves right-to-left, supports pause/play, and jumps to clicked landmark', async ({
+    page
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+
+    const track = page.locator('#marqueeTrack');
+    const animName = await track.evaluate((el) => getComputedStyle(el).animationName);
+    expect(animName).toContain('viganPlacesSlide');
+
+    // Prove the place cards visibly move from right to left (x strictly decreases)
+    const bantayBtn = page.locator(
+      '#marqueeTrack .marquee-group:first-child [data-place-id="bantay-bell-tower"]'
+    );
+    const boxBefore = await bantayBtn.boundingBox();
+    await page.waitForTimeout(350);
+    const boxAfter = await bantayBtn.boundingBox();
+    expect(boxAfter.x).toBeLessThan(boxBefore.x);
+
+    // Toggle pause and resume, confirming pause stabilizes card position
+    const toggleBtn = page.locator('#marqueeToggle');
+    await toggleBtn.click();
+    await expect(page.locator('#marqueeViewport')).toHaveClass(/is-paused/);
+    const pausedX1 = (await bantayBtn.boundingBox()).x;
+    await page.waitForTimeout(200);
+    const pausedX2 = (await bantayBtn.boundingBox()).x;
+    expect(Math.abs(pausedX2 - pausedX1)).toBeLessThan(1);
+
+    // Click Bantay Bell Tower while paused -> selects it in Landmark Explorer
+    await bantayBtn.click();
+    await expect(page.locator('#explorerSpotlight .spotlight-title')).toHaveText('Bantay Bell Tower');
+
+    // Resume loop cleanly
+    await toggleBtn.click();
+    await expect(page.locator('#marqueeViewport')).not.toHaveClass(/is-paused/);
+  });
+
+  test('supports Explorer filter/search, My Vigan Plan Drawer presets, Photo Lightbox keyboard nav, and native FAQ', async ({
+    page
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Filter to Ancestral Museums -> 3 places
+    await page.locator('#explorerFilters [data-category="museum"]').click();
+    await expect(page.locator('#explorerList [data-place-row]')).toHaveCount(3);
+
+    // Search zero results -> Reset filters
+    await page.locator('#explorerSearch').fill('no-such-vigan-place');
+    await expect(page.locator('#explorerList')).toContainText('No Vigan places match');
+    await page.locator('#explorerList [data-reset-filters]').click();
+    await expect(page.locator('#explorerList [data-place-row]')).toHaveCount(11);
+
+    // Open My Vigan Plan drawer -> load 1-Day preset -> count becomes 5
+    await page.locator('#planTriggerBtn').click();
+    await expect(page.locator('#planDrawer')).toHaveAttribute('open', '');
+    await page.locator('#planList [data-preset-id="one-day-classic"]').click();
+    await expect(page.locator('#planTriggerBtn [data-plan-count]')).toHaveText('5');
+    await page.locator('[data-close-drawer="planDrawer"]').click();
+    await expect(page.locator('#planDrawer')).not.toHaveAttribute('open', '');
+
+    // Open Photo Archive Lightbox -> arrow navigation -> close
+    await page.locator('#archiveGrid [data-gallery-index="0"]').click();
+    await expect(page.locator('#galleryLightbox')).toHaveAttribute('open', '');
+    await expect(page.locator('[data-lightbox-counter]')).toHaveText('1 of 6');
+    await page.locator('[data-lightbox-next]').click();
+    await expect(page.locator('[data-lightbox-counter]')).toHaveText('2 of 6');
+    await page.locator('[data-lightbox-close]').click();
+    await expect(page.locator('#galleryLightbox')).not.toHaveAttribute('open', '');
+
+    // Native <details> FAQ opens cleanly
+    const secondFaq = page.locator('#visitFaqList details').nth(1);
+    await secondFaq.locator('summary').click();
+    await expect(secondFaq).toHaveAttribute('open', '');
+  });
+});

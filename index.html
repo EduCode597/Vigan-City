@@ -1,512 +1,394 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Vigan Heritage Escape</title>
+    <title>Vigan City - Living Heritage &amp; Travel Explorer</title>
+    <meta
+      name="description"
+      content="Explore Vigan City, Ilocos Sur: UNESCO World Heritage cobblestones, 11 must-visit landmarks, Ilocano cuisine, living crafts, and an interactive day planner."
+    />
+    <meta property="og:title" content="Vigan City - Living Heritage & Travel Explorer" />
+    <meta
+      property="og:description"
+      content="Walk four centuries of intact Spanish-colonial architecture, discover why Vigan is famous across the Philippines, and build your personal route."
+    />
+    <meta property="og:image" content="images/Landmarks/Thumbnail.jpg" />
+    <link rel="icon" type="image/svg+xml" href="Icon.svg" />
+
+    <!-- Prevent flash of incorrect theme before first paint -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('vigan-theme');
+          var theme =
+            saved === 'light' || saved === 'dark'
+              ? saved
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          document.documentElement.dataset.bsTheme = theme;
+        } catch (e) {
+          document.documentElement.dataset.bsTheme = 'light';
+        }
+      })();
+    </script>
+
+    <!-- Fonts: Playfair Display, Plus Jakarta Sans, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- Bootstrap 6.0.0-alpha.1 CSS (verified SRI) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
+      integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe"
+      crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="style.css" />
-    <!-- Auto-hide navbar styles moved to style.css -->
-    <!-- See: style.css for .auto-hide-navbar rules -->
+
+    <!-- Phosphor Icons (consistent stroke family, zero emojis) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css"
+    />
+
+    <!-- Custom Bootstrap 6 @layer custom Design System -->
+    <link rel="stylesheet" href="css/styles.css" />
   </head>
 
   <body>
-    <!-- Navbar -->
-    <nav
-      id="mainNav"
-      class="navbar navbar-expand-lg fixed-top auto-hide-navbar"
-    >
-      <div class="container">
-        <a class="navbar-brand fw-bold" href="#">Vigan Heritage Escape</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Single-line Sticky Header -->
+    <header class="site-header">
+      <div class="vigan-container header-inner">
+        <a class="site-brand" href="#hero" aria-label="Vigan City home">
+          <img src="Icon.svg" alt="" width="24" height="24" class="brand-mark" aria-hidden="true" />
+          <span>Vigan City</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#why-vigan" class="site-nav-link">Why Vigan</a>
+          <a href="#landmarks" class="site-nav-link">Landmarks</a>
+          <a href="#culture" class="site-nav-link">Food &amp; Craft</a>
+          <a href="#gallery" class="site-nav-link">Archive</a>
+          <a href="#plan" class="site-nav-link">Plan Visit</a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            type="button"
+            class="theme-toggle-btn focus-ring"
+            data-theme-toggle
+            aria-pressed="false"
+            aria-label="Switch to Dark Mode"
+          >
+            <i class="ph ph-moon" data-theme-icon aria-hidden="true"></i>
+            <span data-theme-label>Dark Mode</span>
+          </button>
+
+          <button
+            type="button"
+            class="plan-trigger-btn focus-ring"
+            id="planTriggerBtn"
+            aria-haspopup="dialog"
+            aria-controls="planDrawer"
+          >
+            <i class="ph ph-map-trifold" aria-hidden="true"></i>
+            <span>My Vigan Plan (<span data-plan-count>0</span>)</span>
+          </button>
+
+          <button
+            type="button"
+            class="mobile-menu-btn focus-ring"
+            id="mobileMenuBtn"
+            aria-haspopup="dialog"
+            aria-controls="mobileNavDrawer"
+            aria-label="Open navigation menu"
+          >
+            <i class="ph ph-list" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Section 1: Hero + Auto-Sliding 11-Place Loop (Places Only) -->
+      <section id="hero" class="vigan-hero" aria-labelledby="heroHeading">
+        <div class="vigan-container hero-head-row">
+          <div class="hero-copy">
+            <p class="vigan-eyebrow">UNESCO World Heritage City - Ilocos Sur</p>
+            <h1 id="heroHeading">Walk four centuries of cobblestone, intact.</h1>
+            <p class="hero-subtext">
+              Discover Vigan's landmark streets, brick watchtowers, ancestral mansions, and plazas, then save your stops into a personal route.
+            </p>
+            <div class="hero-actions">
+              <a href="#landmarks" class="btn-vigan-primary focus-ring">Explore Landmarks</a>
+              <a href="#why-vigan" class="btn-vigan-secondary focus-ring">Why Vigan Is Famous</a>
+            </div>
+          </div>
+
+          <div class="hero-marquee-controls">
+            <button
+              type="button"
+              id="marqueeToggle"
+              class="marquee-toggle-btn focus-ring"
+              aria-pressed="false"
+            >
+              <i class="ph ph-pause" data-marquee-icon aria-hidden="true"></i>
+              <span data-marquee-label>Pause loop</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Sole page marquee: right-to-left loop of all 11 physical places -->
+        <div
+          class="marquee-viewport"
+          id="marqueeViewport"
+          role="region"
+          aria-label="Auto-sliding gallery of 11 places around Vigan"
         >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link fw-semibold" href="#about">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-semibold" href="#attractions"
-                >Attractions</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-semibold" href="#culture">Culture</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-semibold" href="#gallery">Gallery</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link fw-semibold" href="#plan">Plan Visit</a>
-            </li>
-          </ul>
+          <div class="marquee-track" id="marqueeTrack"></div>
         </div>
-      </div>
-    </nav>
+      </section>
 
-    <!-- Hero (converted to div for consistent structure) -->
-    <div
-      class="hero d-flex flex-column justify-content-center align-items-center text-center"
-      role="region"
-      aria-label="Hero"
-    >
-      <h1>Discover Vigan City</h1>
-      <p class="lead mt-3">
-        Walk through history. Experience culture. Embrace beauty.
-      </p>
-      <a id="heroCta" href="#about" class="btn btn-heritage mt-4"
-        >Explore Vigan</a
-      >
-      <script>
-        (function () {
-          const btn = document.getElementById("heroCta");
-          if (!btn) return;
-          const original = btn.textContent;
-          const hoverText = "Start Your Journey";
-          const showHover = () => (btn.textContent = hoverText);
-          const restore = () => (btn.textContent = original);
-          btn.addEventListener("mouseenter", showHover);
-          btn.addEventListener("mouseleave", restore);
-          btn.addEventListener("focus", showHover);
-          btn.addEventListener("blur", restore);
-        })();
-      </script>
-    </div>
-
-    <!-- About (converted to div) -->
-    <div id="about" class="container my-5 py-4" role="region" aria-label="About">
-      <div class="row align-items-center outline-box">
-        <div class="col-md-6">
-          <div id="carouselExampleFade" class="carousel slide carousel-fade">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="images/carousel/car1.jpeg" class="d-block w-100" alt="..." />
-              </div>
-              <div class="carousel-item">
-                <img src="images/carousel/car2.jpg" class="d-block w-100" alt="..." />
-              </div>
-              <div class="carousel-item">
-                <img src="images/carousel/car3.jpeg" class="d-block w-100" alt="..." />
-              </div>
-            </div>
-            <button
-              class="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExampleFade"
-              data-bs-slide="prev"
-            >
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button
-              class="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExampleFade"
-              data-bs-slide="next"
-            >
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <h2 class="fw-bold mb-3">About Vigan</h2>
-          <p>
-            Vigan City, the pride of Ilocos Sur, is a UNESCO World Heritage Site
-            and one of the New 7 Wonders Cities of the World known for its
-            timeless blend of Spanish colonial charm and Filipino culture.
-            Visitors can stroll along Calle Crisologo, lined with cobblestone
-            streets, ancestral houses, and kalesas, and enjoy local delicacies
-            like longganisa, empanada, and bagnet. Highlights include St. Paul’s
-            Cathedral, Plaza Salcedo, Bantay Bell Tower, and the Syquia Mansion
-            Museum. By night, the city glows with lights and music, especially
-            during the dancing fountain show, offering travelers a perfect mix
-            of history, culture, and romance.
-          </p>
-          <ul>
-            <li>UNESCO Heritage City</li>
-            <li>Preserved Spanish Architecture</li>
-            <li>Rich Ilocano Culture & Cuisine</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Attractions (converted to div) -->
-    <div id="attractions" class="container" role="region" aria-label="Attractions">
-      <h2 class="section-title">Top Attractions</h2>
-      <div class="row g-4">
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="ratio ratio-16x9 card-img-top overflow-hidden">
-              <img
-                src="images/attractions/CalleCrisologo.jpg"
-                alt="Calle Crisologo"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Calle Crisologo</h5>
-              <p class="card-text">
-                Step back in time with a stroll along this cobblestone street
-                filled with old-world charm.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="ratio ratio-16x9 card-img-top overflow-hidden">
-              <img
-                src="images/attractions/PlazaSalcedo.jpg"
-                alt="Plaza Salcedo"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">Plaza Salcedo</h5>
-              <p class="card-text">
-                Enjoy the nightly dancing fountain shows — a colorful highlight
-                for every visitor.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 shadow-sm">
-            <div class="ratio ratio-16x9 card-img-top overflow-hidden">
-              <img
-                src="images/attractions/ViganCathedral.jpg"
-                alt="Vigan Cathedral"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">St. Paul Cathedral</h5>
-              <p class="card-text">
-                Marvel at its centuries-old architecture and serene spiritual
-                atmosphere.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Culture (converted to div) -->
-    <div id="culture" class="container my-5 py-4" role="region" aria-label="Culture and Cuisine">
-      <h2 class="section-title">Culture & Cuisine</h2>
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <p>
-            Vigan’s culture is a harmonious blend of history, artistry, and
-            tradition. Rooted in its Ilocano heritage, the city preserves
-            age-old customs through its architecture, crafts, and community
-            life. From the cobblestone streets and Spanish colonial houses to
-            the vibrant festivals and local craftsmanship, Vigan stands as a
-            living museum that celebrates both the beauty of the past and the
-            spirit of its people.
-          </p>
-          <p>
-            From handwoven *abel* fabrics to savory *Vigan longganisa*, the city
-            captures Ilocano artistry at its finest. Each craft and dish is a
-            piece of tradition passed through generations. From its time-honored
-            crafts to its distinct local flavors, Vigan reflects a culture
-            deeply rooted in tradition and creativity. Every creation and recipe
-            tells a quiet story of heritage, shaped by generations of skill and
-            pride.
-          </p>
-          <p><strong>Must Try:</strong> Vigan Empanada, Bagnet, Longganisa</p>
-        </div>
-        <div class="col-md-6">
-          <div id="carouselExampleCaptions" class="carousel slide">
-            <div class="carousel-indicators">
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="0"
-                class="active"
-                aria-current="true"
-                aria-label="Slide 1"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="1"
-                aria-label="Slide 2"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="2"
-                aria-label="Slide 3"
-              ></button>
-            </div>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img
-                  src="images/cuisine/ViganEmpanada.jpg"
-                  class="d-block w-100"
-                  alt="vigan empanada"
-                />
-                <div class="carousel-caption d-none d-md-block">
-                  <h5>Vigan Empanada</h5>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <img
-                  src="images/cuisine/Bagnet 4 Ways Recipe.jpeg"
-                  class="d-block w-100"
-                  alt="bagnet"
-                />
-                <div class="carousel-caption d-none d-md-block">
-                  <h5>Bagnet</h5>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <img
-                  src="images/cuisine/Longganisa.jpeg"
-                  class="d-block w-100"
-                  alt="longganisa"
-                />
-                <div class="carousel-caption d-none d-md-block">
-                  <h5>Longganisa</h5>
-                </div>
-              </div>
-            </div>
-            <button
-              class="carousel-control-prev"
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="prev"
-            >
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button
-              class="carousel-control-next"
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide="next"
-            >
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Gallery (converted to div) -->
-    <div id="gallery" class="gallery" role="region" aria-label="Gallery">
-      <div class="container">
-        <h2 class="section-title">Gallery</h2>
-        <div class="row g-3">
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/ViganNightMode.jpg"
-                alt="Vigan Night View"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/ViganNightMode.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/calesa.jpg"
-                alt="Calesa Ride"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/calesa.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/Vigan Pottery.jpg"
-                alt="Burnay Pottery"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/Vigan Pottery.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/Plaza_Burgos.jpg"
-                alt="Plaza Burgos"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/Plaza_Burgos.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/AbelWeaving.jpg"
-                alt="Abel Weaving"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/AbelWeaving.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-          <div class="col-md-4 col-6">
-            <div class="ratio ratio-4x3 rounded-3 overflow-hidden shadow-sm">
-              <img
-                src="images/gallery/Vigan Longganisa.jpg"
-                alt="Longganisa"
-                loading="lazy"
-                role="button"
-                data-bs-toggle="modal"
-                data-bs-target="#lightboxModal"
-                data-bs-src="images/gallery/Vigan Longganisa.jpg"
-                style="width: 100%; height: 100%; object-fit: cover"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Plan Visit (converted to div) -->
-    <div id="plan" class="container my-5" role="region" aria-label="Plan Your Visit">
-      <h2 class="section-title">Plan Your Visit</h2>
-      <div class="row g-4 align-items-stretch">
-        <div class="col-md-4">
-          <div class="card h-100 p-4 shadow-sm">
-            <h5>Best Time to Visit</h5>
-            <p>Cooler months (Nov–Feb) with festivals and cozy weather.</p>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card h-100 p-4 shadow-sm">
-            <h5>Getting There</h5>
+      <!-- Section 2: Why Vigan Is Famous Across the Philippines -->
+      <section id="why-vigan" class="vigan-section section-why reveal" aria-labelledby="whyHeading">
+        <div class="vigan-container why-layout">
+          <div class="why-intro">
+            <h2 id="whyHeading">Why Vigan holds a singular place in the Philippines</h2>
             <p>
-              8-hour bus ride from Manila or fly via Laoag Airport, then 2 hours
-              by land.
+              While most Spanish-era urban centers in the archipelago were flattened during World War II, Vigan survived intact. Its cobblestone grid fuses Ilocano timber craft, Chinese merchant stonework, and Spanish plaza planning into a living town you can still walk end to end.
             </p>
           </div>
+
+          <div class="why-pillars" id="heritageFactsGrid"></div>
         </div>
-        <div class="col-md-4">
-          <div class="card h-100 p-4 shadow-sm">
-            <h5>Where to Stay</h5>
+      </section>
+
+      <!-- Section 3: Interactive Split-Screen Landmark Explorer -->
+      <section id="landmarks" class="vigan-section section-explorer reveal" aria-labelledby="explorerHeading">
+        <div class="vigan-container">
+          <div class="section-header-stack">
+            <h2 id="explorerHeading">Explore Vigan's most-visited landmarks</h2>
             <p>
-              Charming heritage inns and boutique hotels along Calle Crisologo.
+              Select any of the 11 places to read why travelers cross northern Luzon to see it, or save stops into your personal Vigan day plan.
             </p>
           </div>
+
+          <div class="explorer-toolbar">
+            <div
+              class="explorer-filters"
+              id="explorerFilters"
+              role="group"
+              aria-label="Filter landmarks by area"
+            ></div>
+
+            <div class="explorer-search-wrap">
+              <label for="explorerSearch" class="explorer-search-label">Search places</label>
+              <div class="explorer-search-field">
+                <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+                <input
+                  id="explorerSearch"
+                  type="search"
+                  class="explorer-search-input focus-ring"
+                  placeholder="Try Bantay, mansion, pottery, fountain..."
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="explorer-split">
+            <div
+              class="explorer-list"
+              id="explorerList"
+              role="region"
+              aria-label="Vigan landmarks list"
+            ></div>
+
+            <article
+              class="explorer-spotlight"
+              id="explorerSpotlight"
+              aria-live="polite"
+            ></article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Ilocano Cuisine & Living Crafts (Distinct Asymmetric Feature) -->
+      <section id="culture" class="vigan-section section-culture reveal" aria-labelledby="cultureHeading">
+        <div class="vigan-container">
+          <div class="section-header-stack">
+            <h2 id="cultureHeading">Taste and craft passed down for generations</h2>
+            <p>
+              Beyond stone facades, Vigan is famous across the Philippines for savory Ilocano cooking and living handloom and stoneware workshops.
+            </p>
+          </div>
+
+          <div class="culture-asymmetric" id="cultureGrid"></div>
+        </div>
+      </section>
+
+      <!-- Section 5: Captioned Photo Archive + Native Dialog Lightbox -->
+      <section id="gallery" class="vigan-section section-archive reveal" aria-labelledby="archiveHeading">
+        <div class="vigan-container">
+          <div class="section-header-stack">
+            <h2 id="archiveHeading">Scenes across the heritage city</h2>
+            <p>
+              Every photograph carries its place and context beneath the frame. Select any scene to inspect it closer.
+            </p>
+          </div>
+
+          <div class="archive-mosaic" id="archiveGrid"></div>
+        </div>
+      </section>
+
+      <!-- Section 6: Plan Your Visit & Native Details FAQ -->
+      <section id="plan" class="vigan-section section-plan reveal" aria-labelledby="planHeading">
+        <div class="vigan-container plan-layout">
+          <div class="plan-essentials">
+            <div class="section-header-stack">
+              <h2 id="planHeading">Plan your visit to Vigan</h2>
+              <p>
+                Practical routes from Manila or Laoag, ideal festival windows, and how to pace a walkable heritage stay.
+              </p>
+            </div>
+            <div class="essentials-stack" id="travelEssentialsList"></div>
+          </div>
+
+          <div class="plan-faq">
+            <h3 class="faq-heading">First-timer questions</h3>
+            <div class="accordion vigan-accordion" id="visitFaqList"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Theme-Locked Semantic Footer -->
+    <footer id="siteFooter" class="site-footer">
+      <div class="vigan-container footer-inner">
+        <div class="footer-brand-col">
+          <div class="footer-title">Vigan City</div>
+          <p class="footer-note">
+            An editorial guide to Ilocos Sur's UNESCO World Heritage city. Originally created by
+            <strong>John Eduard Madriaga</strong>.
+          </p>
+        </div>
+        <div class="footer-links-col">
+          <a href="#landmarks">Landmarks</a>
+          <a href="#culture">Food &amp; Craft</a>
+          <a href="#plan">Plan Visit</a>
+          <a href="https://educode597.github.io/" target="_blank" rel="noopener noreferrer">educode@develop.ph</a>
+          <a href="#hero">Back to top</a>
         </div>
       </div>
-    </div>
+    </footer>
 
-    <!-- Footer (converted to div) -->
-    <div id="siteFooter" class="site-footer" role="contentinfo">
-      <p>
-        © 2025 Vigan Heritage Escape | Designed by
-        <strong>John Eduard Madriaga</strong>
-      </p>
-      <p>
-        <a href="https://educode597.github.io/">educode@develop.ph</a> |
-        <a href="#">Back to top ↑</a>
-      </p>
-    </div>
+    <!-- Bootstrap 6 Native Mobile Navigation Drawer -->
+    <dialog id="mobileNavDrawer" class="drawer drawer-start vigan-drawer" aria-labelledby="mobileNavTitle">
+      <div class="drawer-header">
+        <h2 class="drawer-title" id="mobileNavTitle">Explore Vigan</h2>
+        <button type="button" class="btn-close focus-ring" data-close-drawer="mobileNavDrawer" aria-label="Close navigation menu"></button>
+      </div>
+      <div class="drawer-body mobile-drawer-body">
+        <nav class="mobile-nav-list" aria-label="Mobile navigation">
+          <a href="#why-vigan" data-close-drawer="mobileNavDrawer">Why Vigan Is Famous</a>
+          <a href="#landmarks" data-close-drawer="mobileNavDrawer">11 Landmarks Explorer</a>
+          <a href="#culture" data-close-drawer="mobileNavDrawer">Food &amp; Living Crafts</a>
+          <a href="#gallery" data-close-drawer="mobileNavDrawer">Photo Archive</a>
+          <a href="#plan" data-close-drawer="mobileNavDrawer">Plan Your Visit</a>
+        </nav>
+        <div class="mobile-drawer-controls">
+          <button
+            type="button"
+            class="btn-vigan-secondary focus-ring w-100"
+            data-theme-toggle
+            aria-pressed="false"
+          >
+            <i class="ph ph-moon" data-theme-icon aria-hidden="true"></i>
+            <span data-theme-label>Dark Mode</span>
+          </button>
+          <button
+            type="button"
+            class="btn-vigan-primary focus-ring w-100"
+            id="mobileOpenPlanBtn"
+          >
+            Open My Vigan Plan (<span data-plan-count>0</span>)
+          </button>
+        </div>
+      </div>
+    </dialog>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 6 Native "My Vigan Plan" Drawer -->
+    <dialog id="planDrawer" class="drawer drawer-end vigan-drawer" aria-labelledby="planDrawerTitle">
+      <div class="drawer-header">
+        <div>
+          <h2 class="drawer-title" id="planDrawerTitle">My Vigan Plan</h2>
+          <p class="drawer-summary" id="planSummary"></p>
+        </div>
+        <button type="button" class="btn-close focus-ring" data-close-drawer="planDrawer" aria-label="Close trip planner"></button>
+      </div>
+      <div class="drawer-body plan-drawer-body">
+        <div id="planList" class="plan-list"></div>
+      </div>
+      <div class="drawer-footer plan-drawer-footer">
+        <p id="planStatus" class="plan-status" role="status" aria-live="polite"></p>
+        <div class="plan-footer-actions">
+          <button type="button" id="copyPlanBtn" class="btn-vigan-primary focus-ring">
+            <i class="ph ph-copy" aria-hidden="true"></i>
+            <span>Copy itinerary</span>
+          </button>
+          <button type="button" id="clearPlanBtn" class="btn-vigan-secondary focus-ring">
+            Clear plan
+          </button>
+        </div>
+      </div>
+    </dialog>
 
-    <!-- Auto-hide Navbar Script -->
-    <script>
-      (() => {
-        const nav = document.getElementById("mainNav");
-        if (!nav) return;
+    <!-- Bootstrap 6 Native Photo Archive Lightbox Dialog -->
+    <dialog id="galleryLightbox" class="dialog dialog-lg vigan-lightbox" aria-labelledby="lightboxTitle">
+      <div class="dialog-header">
+        <div>
+          <span class="lightbox-meta" data-lightbox-location></span>
+          <h2 class="dialog-title" id="lightboxTitle" data-lightbox-title></h2>
+        </div>
+        <button type="button" class="btn-close focus-ring" data-lightbox-close aria-label="Close photo viewer"></button>
+      </div>
+      <div class="dialog-body lightbox-body">
+        <figure class="lightbox-figure">
+          <img data-lightbox-image src="" alt="" />
+          <figcaption data-lightbox-caption></figcaption>
+        </figure>
+      </div>
+      <div class="dialog-footer lightbox-footer">
+        <span class="lightbox-counter" data-lightbox-counter></span>
+        <div class="lightbox-nav-actions">
+          <button type="button" class="btn-vigan-secondary focus-ring" data-lightbox-prev>
+            <i class="ph ph-arrow-left" aria-hidden="true"></i>
+            <span>Previous</span>
+          </button>
+          <button type="button" class="btn-vigan-secondary focus-ring" data-lightbox-next>
+            <span>Next</span>
+            <i class="ph ph-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </dialog>
 
-        let lastY = window.scrollY;
-        let ticking = false;
-        const threshold = 8; // ignore tiny scroll jitter
-        const revealAtTop = 56; // always show near top
+    <!-- Bootstrap 6.0.0-alpha.1 ESM Bundle (verified SRI) -->
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL"
+      crossorigin="anonymous"
+    ></script>
 
-        const collapse = nav.querySelector(".navbar-collapse");
-        const isMenuOpen = () =>
-          collapse && collapse.classList.contains("show");
-
-        const onScroll = () => {
-          const currentY = window.scrollY;
-          const delta = currentY - lastY;
-
-          if (!ticking) {
-            requestAnimationFrame(() => {
-              if (!isMenuOpen()) {
-                if (delta > threshold && currentY > revealAtTop) {
-                  nav.classList.add("is-hidden"); // scrolling down -> hide
-                } else if (delta < -threshold || currentY <= revealAtTop) {
-                  nav.classList.remove("is-hidden"); // scrolling up/top -> show
-                }
-              } else {
-                nav.classList.remove("is-hidden"); // keep visible while menu open
-              }
-              lastY = currentY;
-              ticking = false;
-            });
-            ticking = true;
-          }
-        };
-
-        window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", () =>
-          nav.classList.remove("is-hidden")
-        );
-
-        const toggler = nav.querySelector(".navbar-toggler");
-        if (toggler)
-          toggler.addEventListener("click", () =>
-            nav.classList.remove("is-hidden")
-          );
-      })();
-    </script>
+    <!-- Application Entry Point -->
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
