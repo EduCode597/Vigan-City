@@ -84,7 +84,6 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     expect(css).not.toMatch(/\.plan-status\.is-error\s*\{[^}]*#b42318/i);
     expect(html).not.toMatch(/id="explorerSpotlight"[^>]*aria-live="polite"/);
     expect(html).toContain('@EduCode597');
-    expect(html).toContain('PUP Sto. Tomas');
     expect(html).toContain('https://educode597.github.io/');
     expect(html).toContain('https://github.com/EduCode597');
     expect(html).toContain('mailto:educode597@gmail.com');

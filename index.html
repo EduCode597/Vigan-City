@@ -1,14 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-bs-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <title>Vigan City - Living Heritage &amp; Travel Explorer</title>
     <meta
       name="description"
       content="Explore Vigan City, Ilocos Sur: UNESCO World Heritage cobblestones, 11 must-visit landmarks, Ilocano cuisine, living crafts, and an interactive day planner."
     />
-    <meta property="og:title" content="Vigan City - Living Heritage & Travel Explorer" />
+    <meta
+      property="og:title"
+      content="Vigan City - Living Heritage & Travel Explorer"
+    />
     <meta
       property="og:description"
       content="Walk four centuries of intact Spanish-colonial architecture, discover why Vigan is famous across the Philippines, and build your personal route."
@@ -20,16 +26,17 @@
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('vigan-theme');
+          var saved = localStorage.getItem("vigan-theme");
           var theme =
-            saved === 'light' || saved === 'dark'
+            saved === "light" || saved === "dark"
               ? saved
-              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
+              : window.matchMedia &&
+                  window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
           document.documentElement.dataset.bsTheme = theme;
         } catch (e) {
-          document.documentElement.dataset.bsTheme = 'light';
+          document.documentElement.dataset.bsTheme = "light";
         }
       })();
     </script>
@@ -67,7 +74,14 @@
     <header class="site-header">
       <div class="vigan-container header-inner">
         <a class="site-brand" href="#hero" aria-label="Vigan City home">
-          <img src="Icon.svg" alt="" width="24" height="24" class="brand-mark" aria-hidden="true" />
+          <img
+            src="Icon.svg"
+            alt=""
+            width="24"
+            height="24"
+            class="brand-mark"
+            aria-hidden="true"
+          />
           <span>Vigan City</span>
         </a>
 
@@ -99,7 +113,12 @@
             aria-controls="planDrawer"
           >
             <i class="ph ph-map-trifold" aria-hidden="true"></i>
-            <span>My Vigan Plan (<span data-plan-count>0</span>)</span>
+            <span class="plan-label"
+              ><span class="plan-label-long">My Vigan </span
+              ><span class="plan-label-word">Plan </span>(<span data-plan-count
+                >0</span
+              >)</span
+            >
           </button>
 
           <button
@@ -122,13 +141,20 @@
         <div class="vigan-container hero-head-row">
           <div class="hero-copy">
             <p class="vigan-eyebrow">UNESCO World Heritage City - Ilocos Sur</p>
-            <h1 id="heroHeading">Walk four centuries of cobblestone, intact.</h1>
+            <h1 id="heroHeading">
+              Walk four centuries of cobblestone, intact.
+            </h1>
             <p class="hero-subtext">
-              Discover Vigan's landmark streets, brick watchtowers, ancestral mansions, and plazas, then save your stops into a personal route.
+              Discover Vigan's landmark streets, brick watchtowers, ancestral
+              mansions, and plazas, then save your stops into a personal route.
             </p>
             <div class="hero-actions">
-              <a href="#landmarks" class="btn-vigan-primary focus-ring">Explore Landmarks</a>
-              <a href="#why-vigan" class="btn-vigan-secondary focus-ring">Why Vigan Is Famous</a>
+              <a href="#landmarks" class="btn-vigan-primary focus-ring"
+                >Explore Landmarks</a
+              >
+              <a href="#why-vigan" class="btn-vigan-secondary focus-ring"
+                >Why Vigan Is Famous</a
+              >
             </div>
           </div>
         </div>
@@ -145,12 +171,22 @@
       </section>
 
       <!-- Section 2: Why Vigan Is Famous Across the Philippines -->
-      <section id="why-vigan" class="vigan-section section-why reveal" aria-labelledby="whyHeading">
+      <section
+        id="why-vigan"
+        class="vigan-section section-why reveal"
+        aria-labelledby="whyHeading"
+      >
         <div class="vigan-container why-layout">
           <div class="why-intro">
-            <h2 id="whyHeading">Why Vigan holds a singular place in the Philippines</h2>
+            <h2 id="whyHeading">
+              Why Vigan holds a singular place in the Philippines
+            </h2>
             <p>
-              While most Spanish-era urban centers in the archipelago were flattened during World War II, Vigan survived intact. Its cobblestone grid fuses Ilocano timber craft, Chinese merchant stonework, and Spanish plaza planning into a living town you can still walk end to end.
+              While most Spanish-era urban centers in the archipelago were
+              flattened during World War II, Vigan survived intact. Its
+              cobblestone grid fuses Ilocano timber craft, Chinese merchant
+              stonework, and Spanish plaza planning into a living town you can
+              still walk end to end.
             </p>
           </div>
 
@@ -159,12 +195,17 @@
       </section>
 
       <!-- Section 3: Interactive Split-Screen Landmark Explorer -->
-      <section id="landmarks" class="vigan-section section-explorer reveal" aria-labelledby="explorerHeading">
+      <section
+        id="landmarks"
+        class="vigan-section section-explorer reveal"
+        aria-labelledby="explorerHeading"
+      >
         <div class="vigan-container">
           <div class="section-header-stack">
             <h2 id="explorerHeading">Explore Vigan's most-visited landmarks</h2>
             <p>
-              Select any of the 11 places to read why travelers cross northern Luzon to see it, or save stops into your personal Vigan day plan.
+              Select any of the 11 places to read why travelers cross northern
+              Luzon to see it, or save stops into your personal Vigan day plan.
             </p>
           </div>
 
@@ -177,7 +218,9 @@
             ></div>
 
             <div class="explorer-search-wrap">
-              <label for="explorerSearch" class="explorer-search-label">Search places</label>
+              <label for="explorerSearch" class="explorer-search-label"
+                >Search places</label
+              >
               <div class="explorer-search-field">
                 <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
                 <input
@@ -209,12 +252,20 @@
       </section>
 
       <!-- Section 4: Ilocano Cuisine & Living Crafts (Distinct Asymmetric Feature) -->
-      <section id="culture" class="vigan-section section-culture reveal" aria-labelledby="cultureHeading">
+      <section
+        id="culture"
+        class="vigan-section section-culture reveal"
+        aria-labelledby="cultureHeading"
+      >
         <div class="vigan-container">
           <div class="section-header-stack">
-            <h2 id="cultureHeading">Taste and craft passed down for generations</h2>
+            <h2 id="cultureHeading">
+              Taste and craft passed down for generations
+            </h2>
             <p>
-              Beyond stone facades, Vigan is famous across the Philippines for savory Ilocano cooking and living handloom and stoneware workshops.
+              Beyond stone facades, Vigan is famous across the Philippines for
+              savory Ilocano cooking and living handloom and stoneware
+              workshops.
             </p>
           </div>
 
@@ -223,12 +274,17 @@
       </section>
 
       <!-- Section 5: Captioned Photo Archive + Native Dialog Lightbox -->
-      <section id="gallery" class="vigan-section section-archive reveal" aria-labelledby="archiveHeading">
+      <section
+        id="gallery"
+        class="vigan-section section-archive reveal"
+        aria-labelledby="archiveHeading"
+      >
         <div class="vigan-container">
           <div class="section-header-stack">
             <h2 id="archiveHeading">Scenes across the heritage city</h2>
             <p>
-              Every photograph carries its place and context beneath the frame. Select any scene to inspect it closer.
+              Every photograph carries its place and context beneath the frame.
+              Select any scene to inspect it closer.
             </p>
           </div>
 
@@ -237,13 +293,18 @@
       </section>
 
       <!-- Section 6: Plan Your Visit & Native Details FAQ -->
-      <section id="plan" class="vigan-section section-plan reveal" aria-labelledby="planHeading">
+      <section
+        id="plan"
+        class="vigan-section section-plan reveal"
+        aria-labelledby="planHeading"
+      >
         <div class="vigan-container plan-layout">
           <div class="plan-essentials">
             <div class="section-header-stack">
               <h2 id="planHeading">Plan your visit to Vigan</h2>
               <p>
-                Practical routes from Manila or Laoag, ideal festival windows, and how to pace a walkable heritage stay.
+                Practical routes from Manila or Laoag, ideal festival windows,
+                and how to pace a walkable heritage stay.
               </p>
             </div>
             <div class="essentials-stack" id="travelEssentialsList"></div>
@@ -262,12 +323,25 @@
       <div class="vigan-container">
         <div class="footer-grid">
           <div class="footer-brand-col">
-            <a class="footer-brand-link" href="#hero" aria-label="Vigan City top">
-              <img src="Icon.svg" alt="" width="24" height="24" class="brand-mark" aria-hidden="true" />
+            <a
+              class="footer-brand-link"
+              href="#hero"
+              aria-label="Vigan City top"
+            >
+              <img
+                src="Icon.svg"
+                alt=""
+                width="24"
+                height="24"
+                class="brand-mark"
+                aria-hidden="true"
+              />
               <span class="footer-title">Vigan City</span>
             </a>
             <p class="footer-note">
-              A minimalist travel guide to Ilocos Sur's UNESCO World Heritage city, featuring 11 landmarks, Ilocano cuisine, living crafts, and a personal day-plan builder.
+              A minimalist travel guide to Ilocos Sur's UNESCO World Heritage
+              city, featuring 11 landmarks, Ilocano cuisine, living crafts, and
+              a personal day-plan builder.
             </p>
             <nav class="footer-nav" aria-label="Footer navigation">
               <a href="#why-vigan">Why Vigan</a>
@@ -336,25 +410,47 @@
         </div>
 
         <div class="footer-bottom">
-          <p>&copy; 2026 Vigan City Guide by <strong>John Eduard Madriaga (EduCode)</strong></p>
+          <p>
+            &copy; 2026 Vigan City Guide by
+            <strong>John Eduard Madriaga (EduCode)</strong>
+          </p>
           <p>MIT License - Built with Bootstrap 6</p>
         </div>
       </div>
     </footer>
 
     <!-- Bootstrap 6 Native Mobile Navigation Drawer -->
-    <dialog id="mobileNavDrawer" class="drawer drawer-start vigan-drawer" aria-labelledby="mobileNavTitle">
+    <dialog
+      id="mobileNavDrawer"
+      class="drawer drawer-start vigan-drawer"
+      aria-labelledby="mobileNavTitle"
+    >
       <div class="drawer-header">
         <h2 class="drawer-title" id="mobileNavTitle">Explore Vigan</h2>
-        <button type="button" class="btn-close focus-ring" data-close-drawer="mobileNavDrawer" aria-label="Close navigation menu"></button>
+        <button
+          type="button"
+          class="btn-close focus-ring"
+          data-close-drawer="mobileNavDrawer"
+          aria-label="Close navigation menu"
+        ></button>
       </div>
       <div class="drawer-body mobile-drawer-body">
         <nav class="mobile-nav-list" aria-label="Mobile navigation">
-          <a href="#why-vigan" data-close-drawer="mobileNavDrawer">Why Vigan Is Famous</a>
-          <a href="#landmarks" data-close-drawer="mobileNavDrawer">11 Landmarks Explorer</a>
-          <a href="#culture" data-close-drawer="mobileNavDrawer">Food &amp; Living Crafts</a>
-          <a href="#gallery" data-close-drawer="mobileNavDrawer">Photo Archive</a>
-          <a href="#plan" data-close-drawer="mobileNavDrawer">Plan Your Visit</a>
+          <a href="#why-vigan" data-close-drawer="mobileNavDrawer"
+            >Why Vigan Is Famous</a
+          >
+          <a href="#landmarks" data-close-drawer="mobileNavDrawer"
+            >11 Landmarks Explorer</a
+          >
+          <a href="#culture" data-close-drawer="mobileNavDrawer"
+            >Food &amp; Living Crafts</a
+          >
+          <a href="#gallery" data-close-drawer="mobileNavDrawer"
+            >Photo Archive</a
+          >
+          <a href="#plan" data-close-drawer="mobileNavDrawer"
+            >Plan Your Visit</a
+          >
         </nav>
         <div class="mobile-drawer-controls">
           <button
@@ -378,25 +474,47 @@
     </dialog>
 
     <!-- Bootstrap 6 Native "My Vigan Plan" Drawer -->
-    <dialog id="planDrawer" class="drawer drawer-end vigan-drawer" aria-labelledby="planDrawerTitle">
+    <dialog
+      id="planDrawer"
+      class="drawer drawer-end vigan-drawer"
+      aria-labelledby="planDrawerTitle"
+    >
       <div class="drawer-header">
         <div>
           <h2 class="drawer-title" id="planDrawerTitle">My Vigan Plan</h2>
           <p class="drawer-summary" id="planSummary"></p>
         </div>
-        <button type="button" class="btn-close focus-ring" data-close-drawer="planDrawer" aria-label="Close trip planner"></button>
+        <button
+          type="button"
+          class="btn-close focus-ring"
+          data-close-drawer="planDrawer"
+          aria-label="Close trip planner"
+        ></button>
       </div>
       <div class="drawer-body plan-drawer-body">
         <div id="planList" class="plan-list"></div>
       </div>
       <div class="drawer-footer plan-drawer-footer">
-        <p id="planStatus" class="plan-status" role="status" aria-live="polite"></p>
+        <p
+          id="planStatus"
+          class="plan-status"
+          role="status"
+          aria-live="polite"
+        ></p>
         <div class="plan-footer-actions">
-          <button type="button" id="copyPlanBtn" class="btn-vigan-primary focus-ring">
+          <button
+            type="button"
+            id="copyPlanBtn"
+            class="btn-vigan-primary focus-ring"
+          >
             <i class="ph ph-copy" aria-hidden="true"></i>
             <span>Copy itinerary</span>
           </button>
-          <button type="button" id="clearPlanBtn" class="btn-vigan-secondary focus-ring">
+          <button
+            type="button"
+            id="clearPlanBtn"
+            class="btn-vigan-secondary focus-ring"
+          >
             Clear plan
           </button>
         </div>
@@ -404,13 +522,22 @@
     </dialog>
 
     <!-- Bootstrap 6 Native Photo Archive Lightbox Dialog -->
-    <dialog id="galleryLightbox" class="dialog dialog-lg vigan-lightbox" aria-labelledby="lightboxTitle">
+    <dialog
+      id="galleryLightbox"
+      class="dialog dialog-lg vigan-lightbox"
+      aria-labelledby="lightboxTitle"
+    >
       <div class="dialog-header">
         <div>
           <span class="lightbox-meta" data-lightbox-location></span>
           <h2 class="dialog-title" id="lightboxTitle" data-lightbox-title></h2>
         </div>
-        <button type="button" class="btn-close focus-ring" data-lightbox-close aria-label="Close photo viewer"></button>
+        <button
+          type="button"
+          class="btn-close focus-ring"
+          data-lightbox-close
+          aria-label="Close photo viewer"
+        ></button>
       </div>
       <div class="dialog-body lightbox-body">
         <figure class="lightbox-figure">
@@ -421,11 +548,19 @@
       <div class="dialog-footer lightbox-footer">
         <span class="lightbox-counter" data-lightbox-counter></span>
         <div class="lightbox-nav-actions">
-          <button type="button" class="btn-vigan-secondary focus-ring" data-lightbox-prev>
+          <button
+            type="button"
+            class="btn-vigan-secondary focus-ring"
+            data-lightbox-prev
+          >
             <i class="ph ph-arrow-left" aria-hidden="true"></i>
             <span>Previous</span>
           </button>
-          <button type="button" class="btn-vigan-secondary focus-ring" data-lightbox-next>
+          <button
+            type="button"
+            class="btn-vigan-secondary focus-ring"
+            data-lightbox-next
+          >
             <span>Next</span>
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
           </button>

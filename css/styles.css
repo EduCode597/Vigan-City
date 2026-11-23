@@ -1681,4 +1681,191 @@
     display: flex;
     gap: 0.6rem;
   }
+
+  /* =====================================================================
+   * RESPONSIVE HARDENING (phones, tablets, landscape, notches)
+   * Desktop (>= 992px, fine pointer) rendering is intentionally untouched.
+   * ===================================================================== */
+
+  /* --- Safe areas (viewport-fit=cover) --- */
+  .vigan-container {
+    padding-inline-start: max(clamp(1.25rem, 3.2vw, 2.5rem), env(safe-area-inset-left, 0px));
+    padding-inline-end: max(clamp(1.25rem, 3.2vw, 2.5rem), env(safe-area-inset-right, 0px));
+  }
+  .vigan-drawer.drawer-end {
+    padding-inline-end: env(safe-area-inset-right, 0px);
+  }
+  .vigan-drawer.drawer-start {
+    padding-inline-start: env(safe-area-inset-left, 0px);
+  }
+  .plan-drawer-footer {
+    padding-block-end: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+  }
+  .mobile-drawer-body {
+    padding-block-end: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* --- Footer: allow long chips / email to wrap on tiny screens --- */
+  .footer-dev-card,
+  .footer-brand-col,
+  .footer-dev-head > div {
+    min-width: 0;
+  }
+  .footer-social-link {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* --- Photo viewer: always fully on screen (header + body + footer) --- */
+  .vigan-lightbox[open] {
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100dvh - 1rem);
+    overflow: hidden;
+  }
+  .vigan-lightbox .dialog-header,
+  .vigan-lightbox .lightbox-footer {
+    flex: 0 0 auto;
+  }
+  .vigan-lightbox .lightbox-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .lightbox-figure img {
+    max-height: min(60dvh, calc(100dvh - 17rem));
+    min-height: 120px;
+  }
+
+  /* --- Tablet: spotlight facts keep 3 columns when there is room --- */
+  @media (min-width: 560px) and (max-width: 991.98px) {
+    .spotlight-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  /* --- Narrow phones: header fits 320px (and below) --- */
+  .site-brand {
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  @media (max-width: 420px) {
+    .header-inner {
+      gap: 0.5rem;
+    }
+    .header-actions {
+      gap: 0.4rem;
+    }
+    .site-brand {
+      font-size: 1.1rem;
+      gap: 0.4rem;
+    }
+    .plan-trigger-btn {
+      padding-inline: 0.6rem;
+    }
+    .plan-label-long {
+      display: none;
+    }
+  }
+  @media (max-width: 340px) {
+    .plan-label-word {
+      display: none;
+    }
+  }
+
+  /* --- Touch: no sticky hover lifts, marquee can be paused by touch --- */
+  @media (hover: none) {
+    .place-slide:hover,
+    .archive-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .archive-card:hover .archive-media img {
+      transform: none;
+    }
+  }
+  .marquee-viewport:focus-within .marquee-track,
+  .marquee-viewport:active .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* --- Touch targets: 44px on touch devices and small screens only --- */
+  @media (pointer: coarse), (max-width: 991.98px) {
+    .site-brand,
+    .footer-brand-link,
+    .mobile-menu-btn,
+    .plan-trigger-btn,
+    .theme-toggle-btn,
+    .btn-vigan-primary,
+    .btn-vigan-secondary,
+    .explorer-chip,
+    .explorer-save-btn,
+    .spotlight-view-toggle,
+    .plan-remove-btn,
+    .plan-mini-preset,
+    .footer-social-link,
+    .footer-portfolio-btn,
+    .explorer-search-input {
+      min-height: 44px;
+    }
+    .mobile-menu-btn,
+    .explorer-save-btn,
+    .plan-remove-btn {
+      min-width: 44px;
+    }
+    .vigan-drawer .btn-close,
+    .vigan-lightbox .btn-close {
+      min-width: 44px;
+      min-height: 44px;
+    }
+    .footer-nav {
+      gap: 0 1.35rem;
+    }
+    .footer-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+
+  /* --- Short landscape screens: compact drawers and viewer --- */
+  @media (max-height: 500px) {
+    .vigan-drawer .drawer-header,
+    .vigan-lightbox .dialog-header {
+      padding: 0.6rem 1rem;
+    }
+    .vigan-drawer .drawer-title,
+    .vigan-lightbox .dialog-title {
+      font-size: 1.1rem;
+    }
+    .plan-drawer-body,
+    .mobile-drawer-body {
+      padding: 0.75rem 1rem;
+    }
+    .plan-drawer-footer {
+      padding: 0.6rem 1rem calc(0.6rem + env(safe-area-inset-bottom, 0px));
+    }
+    .plan-status {
+      margin-block-end: 0.35rem;
+      min-height: 0;
+    }
+    .plan-status:empty {
+      display: none;
+    }
+    .plan-footer-actions {
+      flex-wrap: nowrap;
+    }
+    .lightbox-body {
+      padding: 0.6rem 1rem;
+    }
+    .lightbox-footer {
+      padding: 0.5rem 1rem;
+    }
+    .lightbox-figure img {
+      max-height: calc(100dvh - 14rem);
+      min-height: 90px;
+      margin-block-end: 0.5rem;
+    }
+  }
 }
