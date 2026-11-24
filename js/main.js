@@ -9,12 +9,19 @@ import {
   TRAVEL_ESSENTIALS,
   FAQ_ITEMS
 } from './data/vigan-data.js';
+import {
+  CHATBOT_KNOWLEDGE,
+  WELCOME_MESSAGE,
+  STARTER_SUGGESTIONS
+} from './data/chatbot-knowledge.js';
 import { initTheme } from './modules/theme.js';
 import { initMarquee } from './modules/marquee.js';
 import { createItineraryStore, initItineraryDrawer } from './modules/itinerary.js';
 import { initExplorer } from './modules/explorer.js';
 import { initLightbox } from './modules/lightbox.js';
 import { initReveal, initNavSpy } from './modules/reveal.js';
+import { buildKnowledgeBase, createConversation } from './modules/chatbot-engine.js';
+import { initChatbot } from './modules/chatbot.js';
 
 function renderHeritageFacts(container) {
   if (!container) return;
@@ -218,6 +225,61 @@ function wireNativeDrawers(planDrawerApi) {
   });
 }
 
+export function extractPageContext(doc = typeof document !== 'undefined' ? document : null) {
+  if (!doc) {
+    return {
+      whyIntro: '',
+      developer: {
+        name: '',
+        handle: '',
+        portfolioUrl: '',
+        githubUrl: '',
+        linkedinUrl: '',
+        email: ''
+      }
+    };
+  }
+
+  const whyIntroEl = doc.querySelector('#why-vigan .why-intro p');
+  const whyIntro = whyIntroEl?.textContent?.replace(/\s+/g, ' ').trim() || '';
+
+  const devCard = doc.querySelector('.footer-dev-card');
+  const name = devCard?.querySelector('.footer-dev-name')?.textContent?.trim() || '';
+  const handle = devCard?.querySelector('.footer-dev-handle')?.textContent?.trim() || '';
+
+  const portfolioAnchor =
+    devCard?.querySelector('.footer-portfolio-btn[href]') ||
+    Array.from(devCard?.querySelectorAll('a[href]') || []).find((anchor) => {
+      const href = anchor.getAttribute('href') || '';
+      return (
+        href.startsWith('http') &&
+        !href.includes('github.com') &&
+        !href.includes('linkedin.com')
+      );
+    });
+  const portfolioUrl = portfolioAnchor?.getAttribute('href')?.trim() || '';
+
+  const githubUrl =
+    devCard?.querySelector('a[href*="github.com"]')?.getAttribute('href')?.trim() || '';
+  const linkedinUrl =
+    devCard?.querySelector('a[href*="linkedin.com"]')?.getAttribute('href')?.trim() || '';
+  const emailHref =
+    devCard?.querySelector('a[href^="mailto:"]')?.getAttribute('href')?.trim() || '';
+  const email = emailHref.replace(/^mailto:/i, '').trim();
+
+  return {
+    whyIntro,
+    developer: {
+      name,
+      handle,
+      portfolioUrl,
+      githubUrl,
+      linkedinUrl,
+      email
+    }
+  };
+}
+
 function bootstrapApp() {
   initTheme({
     root: document.documentElement,
@@ -282,10 +344,56 @@ function bootstrapApp() {
     links: document.querySelectorAll('.site-nav-link'),
     sections: document.querySelectorAll('main section[id]')
   });
+
+  try {
+    const kb = buildKnowledgeBase(
+      {
+        places: PLACES,
+        categories: PLACE_CATEGORIES,
+        heritageFacts: HERITAGE_FACTS,
+        cultureItems: CULTURE_ITEMS,
+        galleryItems: GALLERY_ITEMS,
+        presets: TRIP_PRESETS,
+        travelEssentials: TRAVEL_ESSENTIALS,
+        faqItems: FAQ_ITEMS,
+        pageContext: extractPageContext(document)
+      },
+      CHATBOT_KNOWLEDGE
+    );
+    const conversation = createConversation(kb);
+    const chatApi = initChatbot({
+      conversation,
+      fabEl: document.getElementById('chatFab'),
+      panelEl: document.getElementById('chatPanel'),
+      closeBtn: document.getElementById('chatCloseBtn'),
+      messagesEl: document.getElementById('chatMessages'),
+      suggestionsEl: document.getElementById('chatSuggestions'),
+      formEl: document.getElementById('chatForm'),
+      inputEl: document.getElementById('chatInput'),
+      welcomeMessage: WELCOME_MESSAGE,
+      starterSuggestions: STARTER_SUGGESTIONS,
+      onViewPlace: (id) => explorerApi.selectAndFocusPlace(id),
+      onAddPlace: (id) => {
+        if (!itineraryStore.hasStop(id)) itineraryStore.toggleStop(id);
+      },
+      onLoadPreset: (id) => {
+        itineraryStore.applyPreset(id);
+        planDrawerApi.openDrawer();
+      },
+      isPlaceSaved: (id) => itineraryStore.hasStop(id),
+      hasAnySavedStops: () => itineraryStore.getSavedIds().length > 0
+    });
+
+    itineraryStore.subscribe(() => chatApi.syncActionStates());
+  } catch (err) {
+    console.error('Ask Vigan chatbot failed to initialize:', err);
+  }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootstrapApp);
-} else {
-  bootstrapApp();
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrapApp);
+  } else {
+    bootstrapApp();
+  }
 }

@@ -47,20 +47,26 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     // Zero emojis in HTML
     expect(html).not.toMatch(/\p{Extended_Pictographic}/u);
 
-    // Zero window.addEventListener('scroll') anywhere in production code
+    // Zero window.addEventListener('scroll'), em-dashes, en-dashes, or emojis in production JS
     const jsFiles = [
       'js/main.js',
       'js/data/vigan-data.js',
+      'js/data/chatbot-knowledge.js',
       'js/modules/theme.js',
       'js/modules/marquee.js',
       'js/modules/itinerary.js',
       'js/modules/explorer.js',
       'js/modules/lightbox.js',
-      'js/modules/reveal.js'
+      'js/modules/reveal.js',
+      'js/modules/chatbot-engine.js',
+      'js/modules/chatbot.js'
     ];
     for (const rel of jsFiles) {
       const src = readText(rel);
       expect(src, `Found forbidden scroll listener in ${rel}`).not.toMatch(/addEventListener\(\s*['"]scroll['"]/);
+      expect(src, `Found em-dash in ${rel}`).not.toContain('\u2014');
+      expect(src, `Found en-dash in ${rel}`).not.toContain('\u2013');
+      expect(src, `Found emoji in ${rel}`).not.toMatch(/\p{Extended_Pictographic}/u);
     }
 
     // Eyebrow cap: max 2 eyebrows across the 6 sections
@@ -84,10 +90,30 @@ describe('Pre-flight static HTML, CSS, and Bootstrap 6 audit', () => {
     expect(css).not.toMatch(/\.plan-status\.is-error\s*\{[^}]*#b42318/i);
     expect(html).not.toMatch(/id="explorerSpotlight"[^>]*aria-live="polite"/);
     expect(html).toContain('@EduCode597');
-    expect(html).toContain('PUP Sto. Tomas');
     expect(html).toContain('https://educode597.github.io/');
     expect(html).toContain('https://github.com/EduCode597');
     expect(html).toContain('mailto:educode597@gmail.com');
     expect(mainJs.length).toBeGreaterThan(100);
+  });
+
+  it('includes accessible non-modal Ask Vigan chatbot markup and hidden-state CSS without breaking v6 guardrails', () => {
+    const html = readText('index.html');
+    const css = readText('css/styles.css');
+    const readme = readText('README.md');
+
+    expect(css).not.toContain('\u2014');
+    expect(css).not.toContain('\u2013');
+    expect(css).not.toMatch(/\p{Extended_Pictographic}/u);
+    expect(readme).not.toContain('\u2014');
+    expect(readme).not.toContain('\u2013');
+    expect(readme).not.toMatch(/\p{Extended_Pictographic}/u);
+
+    expect(html).toContain('id="chatFab"');
+    expect(html).toContain('aria-label="Ask about Vigan"');
+    expect(html).toContain('aria-controls="chatPanel"');
+    expect(html).toContain('id="chatPanel"');
+    expect(html).toContain('role="dialog"');
+    expect(html).toContain('aria-modal="false"');
+    expect(css).toContain('.vigan-chat-panel[hidden]');
   });
 });

@@ -12,6 +12,7 @@ Live site: <https://educode597.github.io/Vigan-City/>
 - **My Vigan Plan Drawer:** Built on Bootstrap 6's native `<dialog class="drawer">`, sorting saved stops chronologically from Morning to Evening with estimated time, curated 1-day and 2-day presets, `localStorage` persistence, and clipboard itinerary copy.
 - **Food & Living Crafts:** Dedicated stories for Abel Iloko handloom weaving, burnay stoneware pottery, Vigan empanada, crispy bagnet, and garlicky Vigan longganisa.
 - **Captioned Photo Archive & Lightbox:** Every photo carries a visible caption below the frame and opens in a keyboard-accessible Bootstrap 6 `<dialog>` viewer.
+- **Ask Vigan Guide Chatbot:** Non-modal floating assistant grounded strictly in this site's landmarks, food, crafts, travel essentials, FAQs, and developer info, with quick explorer jumps, itinerary additions, and starter route loading.
 - **Dual Light & Dark Mode:** Cool Slate neutrals with a single Kiln Terracotta accent powered by `[data-bs-theme]` and persisted in `localStorage`.
 
 ## Project Structure
@@ -25,14 +26,17 @@ Vigan-City/
 ├── js/
 │   ├── main.js
 │   ├── data/
-│   │   └── vigan-data.js
+│   │   ├── vigan-data.js
+│   │   └── chatbot-knowledge.js
 │   └── modules/
 │       ├── theme.js
 │       ├── marquee.js
 │       ├── itinerary.js
 │       ├── explorer.js
 │       ├── lightbox.js
-│       └── reveal.js
+│       ├── reveal.js
+│       ├── chatbot-engine.js
+│       └── chatbot.js
 ├── images/
 │   ├── Landmarks/
 │   ├── attractions/
@@ -46,6 +50,8 @@ Vigan-City/
     ├── itinerary.test.js
     ├── explorer.test.js
     ├── lightbox-and-reveal.test.js
+    ├── chatbot-engine.test.js
+    ├── chatbot-ui.test.js
     ├── preflight-audit.test.js
     └── e2e/
         └── site.spec.js
