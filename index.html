@@ -568,6 +568,74 @@
       </div>
     </dialog>
 
+    <!-- Ask Vigan Floating Chatbot (Option A: Round FAB + Non-Modal Floating Card) -->
+    <button
+      type="button"
+      id="chatFab"
+      class="vigan-chat-fab focus-ring"
+      aria-label="Ask about Vigan"
+      aria-haspopup="dialog"
+      aria-controls="chatPanel"
+      aria-expanded="false"
+    >
+      <i class="ph ph-chat-circle-text" data-chat-fab-icon aria-hidden="true"></i>
+    </button>
+
+    <section
+      id="chatPanel"
+      class="vigan-chat-panel"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="chatPanelTitle"
+      hidden
+    >
+      <div class="vigan-chat-header">
+        <div>
+          <h2 class="vigan-chat-title" id="chatPanelTitle">Ask Vigan</h2>
+          <p class="vigan-chat-subtitle">Answers from this site's guide</p>
+        </div>
+        <button
+          type="button"
+          id="chatCloseBtn"
+          class="btn-close vigan-chat-close focus-ring"
+          aria-label="Close Ask Vigan chat"
+        ></button>
+      </div>
+
+      <div
+        id="chatMessages"
+        class="vigan-chat-messages"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+      ></div>
+
+      <div
+        id="chatSuggestions"
+        class="vigan-chat-suggestions"
+        aria-label="Suggested questions"
+      ></div>
+
+      <form id="chatForm" class="vigan-chat-form" novalidate>
+        <input
+          id="chatInput"
+          type="text"
+          class="vigan-chat-input focus-ring"
+          placeholder="Ask about Vigan..."
+          maxlength="300"
+          autocomplete="off"
+          aria-label="Ask a question about Vigan"
+        />
+        <button
+          type="submit"
+          class="vigan-chat-send focus-ring"
+          aria-label="Send question"
+        >
+          <i class="ph ph-paper-plane-right" aria-hidden="true"></i>
+        </button>
+      </form>
+    </section>
+
     <!-- Bootstrap 6.0.0-alpha.1 ESM Bundle (verified SRI) -->
     <script
       type="module"

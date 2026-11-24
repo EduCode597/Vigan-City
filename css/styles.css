@@ -1868,4 +1868,384 @@
       margin-block-end: 0.5rem;
     }
   }
+
+  /* =====================================================================
+   * ASK VIGAN FLOATING CHATBOT (Non-Modal Floating Card)
+   * ===================================================================== */
+  .vigan-chat-panel[hidden] {
+    display: none !important;
+  }
+
+  .vigan-chat-fab {
+    position: fixed;
+    z-index: 95;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    inset-inline-end: max(20px, env(safe-area-inset-right, 0px));
+    inset-block-end: max(20px, env(safe-area-inset-bottom, 0px));
+    background-color: var(--vigan-accent);
+    color: var(--vigan-accent-contrast);
+    border: 1px solid var(--vigan-accent);
+    box-shadow: var(--vigan-shadow-hover);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s var(--vigan-ease);
+  }
+  .vigan-chat-fab:hover {
+    background-color: var(--vigan-accent-hover);
+    border-color: var(--vigan-accent-hover);
+    transform: translateY(-2px);
+  }
+  .vigan-chat-fab:active {
+    transform: scale(0.96);
+  }
+
+  .vigan-chat-panel {
+    position: fixed;
+    z-index: 95;
+    inset-inline-end: max(20px, env(safe-area-inset-right, 0px));
+    inset-block-end: calc(max(20px, env(safe-area-inset-bottom, 0px)) + 64px);
+    width: min(360px, calc(100vw - 2.5rem));
+    height: min(520px, calc(100dvh - 166px));
+    max-height: calc(100dvh - 166px);
+    background-color: var(--vigan-surface);
+    color: var(--vigan-ink);
+    border: 1px solid var(--vigan-border);
+    border-radius: var(--vigan-radius);
+    box-shadow: var(--vigan-shadow-hover);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .vigan-chat-header {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background-color: var(--vigan-surface);
+    border-block-end: 1px solid var(--vigan-border);
+  }
+  .vigan-chat-header > div {
+    min-width: 0;
+  }
+
+  .vigan-chat-title {
+    font-family: var(--vigan-font-display);
+    font-size: 1.12rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--vigan-ink);
+    margin: 0;
+  }
+
+  .vigan-chat-subtitle {
+    font-size: 0.76rem;
+    color: var(--vigan-muted);
+    line-height: 1.35;
+    margin: 0.18rem 0 0;
+  }
+
+  .vigan-chat-close {
+    flex-shrink: 0;
+    margin-block-start: 0.1rem;
+  }
+
+  .vigan-chat-messages {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    background-color: var(--vigan-bg);
+  }
+
+  .vigan-chat-msg {
+    max-width: 90%;
+    padding: 0.68rem 0.85rem;
+    border-radius: var(--vigan-radius);
+    font-size: 0.84rem;
+    line-height: 1.52;
+    overflow-wrap: anywhere;
+  }
+  .vigan-chat-msg p {
+    margin: 0;
+  }
+  .vigan-chat-msg p + p {
+    margin-block-start: 0.45rem;
+  }
+
+  .vigan-chat-msg-user {
+    align-self: flex-end;
+    background-color: var(--vigan-accent);
+    color: var(--vigan-accent-contrast);
+    border: 1px solid var(--vigan-accent);
+  }
+
+  .vigan-chat-msg-bot {
+    align-self: flex-start;
+    background-color: var(--vigan-surface);
+    color: var(--vigan-ink);
+    border: 1px solid var(--vigan-border);
+  }
+
+  .vigan-chat-reply-title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--vigan-ink);
+    margin-block-end: 0.3rem;
+  }
+
+  .vigan-chat-list {
+    margin: 0.45rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .vigan-chat-list li {
+    padding-block-start: 0.5rem;
+    border-block-start: 1px solid var(--vigan-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .vigan-chat-list li strong {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--vigan-ink);
+  }
+  .vigan-chat-list li span {
+    font-size: 0.8rem;
+    color: var(--vigan-muted);
+    line-height: 1.45;
+  }
+
+  .vigan-chat-typing {
+    min-width: 3.2rem;
+  }
+  .vigan-chat-typing-dots {
+    display: inline-block;
+    font-family: var(--vigan-font-mono);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--vigan-muted);
+    animation: viganChatPulse 1.1s ease-in-out infinite;
+  }
+  @keyframes viganChatPulse {
+    0%,
+    100% {
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .vigan-chat-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-block-start: 0.5rem;
+  }
+  .vigan-chat-list li .vigan-chat-actions {
+    margin-block-start: 0.3rem;
+  }
+
+  .vigan-chat-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--vigan-font-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 0.34rem 0.62rem;
+    border-radius: var(--vigan-radius-sm);
+    border: 1px solid var(--vigan-border);
+    background-color: var(--vigan-bg);
+    color: var(--vigan-ink);
+    cursor: pointer;
+    text-align: start;
+    max-width: 100%;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .vigan-chat-action:hover:not(:disabled) {
+    border-color: var(--vigan-accent);
+    background-color: var(--vigan-accent-soft);
+    color: var(--vigan-accent-soft-fg);
+  }
+  .vigan-chat-action.is-saved,
+  .vigan-chat-action:disabled {
+    background-color: var(--vigan-accent-soft);
+    border-color: color-mix(in srgb, var(--vigan-accent) 40%, transparent);
+    color: var(--vigan-accent-soft-fg);
+    cursor: default;
+  }
+
+  .vigan-chat-suggestions {
+    flex: 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-block-start: 1px solid var(--vigan-border);
+    background-color: var(--vigan-surface);
+    max-height: 108px;
+    overflow-y: auto;
+  }
+  .vigan-chat-suggestions:empty {
+    display: none;
+  }
+
+  .vigan-chat-chip {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--vigan-font-sans);
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1.25;
+    padding: 0.32rem 0.65rem;
+    border-radius: var(--vigan-radius-sm);
+    border: 1px solid var(--vigan-border);
+    background-color: var(--vigan-bg);
+    color: var(--vigan-ink);
+    cursor: pointer;
+    max-width: 100%;
+    text-align: start;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+  .vigan-chat-chip:hover {
+    border-color: var(--vigan-accent);
+    background-color: var(--vigan-accent-soft);
+    color: var(--vigan-accent-soft-fg);
+  }
+
+  .vigan-chat-form {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    border-block-start: 1px solid var(--vigan-border);
+    background-color: var(--vigan-surface);
+  }
+
+  .vigan-chat-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    background-color: var(--vigan-bg);
+    color: var(--vigan-ink);
+    border: 1px solid var(--vigan-border);
+    border-radius: var(--vigan-radius);
+    padding: 0.5rem 0.75rem;
+    font-family: var(--vigan-font-sans);
+    font-size: 0.86rem;
+    line-height: 1.35;
+  }
+  .vigan-chat-input::placeholder {
+    color: var(--vigan-muted);
+  }
+
+  .vigan-chat-send {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: var(--vigan-radius);
+    border: 1px solid var(--vigan-accent);
+    background-color: var(--vigan-accent);
+    color: var(--vigan-accent-contrast);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.14s ease;
+  }
+  .vigan-chat-send:hover {
+    background-color: var(--vigan-accent-hover);
+    border-color: var(--vigan-accent-hover);
+  }
+  .vigan-chat-send:active {
+    transform: scale(0.96);
+  }
+
+  @media (hover: none) {
+    .vigan-chat-fab:hover {
+      transform: none;
+    }
+  }
+
+  @media (pointer: coarse), (max-width: 991.98px) {
+    .vigan-chat-close,
+    .vigan-chat-send,
+    .vigan-chat-action,
+    .vigan-chat-chip,
+    .vigan-chat-input {
+      min-height: 44px;
+    }
+    .vigan-chat-close,
+    .vigan-chat-send {
+      min-width: 44px;
+    }
+  }
+
+  @media (max-width: 575.98px), (max-height: 500px) {
+    .vigan-chat-panel {
+      inset: 0;
+      width: 100vw;
+      max-width: 100%;
+      height: 100dvh;
+      max-height: 100dvh;
+      border-radius: 0;
+      border: 0;
+      z-index: 150;
+    }
+    .vigan-chat-header {
+      padding-block-start: max(0.85rem, env(safe-area-inset-top, 0px));
+      padding-inline: max(1rem, env(safe-area-inset-left, 0px)) max(1rem, env(safe-area-inset-right, 0px));
+    }
+    .vigan-chat-messages,
+    .vigan-chat-suggestions {
+      padding-inline: max(1rem, env(safe-area-inset-left, 0px)) max(1rem, env(safe-area-inset-right, 0px));
+    }
+    .vigan-chat-form {
+      padding-inline: max(1rem, env(safe-area-inset-left, 0px)) max(1rem, env(safe-area-inset-right, 0px));
+      padding-block-end: max(0.65rem, env(safe-area-inset-bottom, 0px));
+    }
+    .vigan-chat-fab.is-open {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vigan-chat-fab,
+    .vigan-chat-fab:hover,
+    .vigan-chat-fab:active,
+    .vigan-chat-action,
+    .vigan-chat-chip,
+    .vigan-chat-send,
+    .vigan-chat-send:active {
+      transition: none;
+      transform: none;
+    }
+    .vigan-chat-typing-dots {
+      animation: none;
+    }
+  }
 }
