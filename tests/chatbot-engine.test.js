@@ -163,6 +163,24 @@ describe('chatbot engine and knowledge base', () => {
     expect(salcedoTime.kind).toBe('answer');
     expect(getReplyBodyText(salcedoTime)).toContain('7:30 PM fountain show');
 
+    const bantayWhen = conv.ask('When to visit Bantay Bell Tower?');
+    assertReplyGuardrails(bantayWhen);
+    expect(bantayWhen.kind).toBe('answer');
+    expect(bantayWhen.title).toBe('Bantay Bell Tower');
+    expect(getReplyBodyText(bantayWhen)).toContain('4:30 PM to 5:45 PM');
+
+    const baluarteTime = conv.ask('Best time to visit Baluarte?');
+    assertReplyGuardrails(baluarteTime);
+    expect(baluarteTime.kind).toBe('answer');
+    expect(baluarteTime.title).toBe('Baluarte Resort & Safari');
+    expect(getReplyBodyText(baluarteTime)).toContain('2:30 PM to 5:00 PM');
+
+    const bantayDuration = conv.ask('How much time at Bantay Bell Tower?');
+    assertReplyGuardrails(bantayDuration);
+    expect(bantayDuration.kind).toBe('answer');
+    expect(getReplyBodyText(bantayDuration)).toContain('30 to 40 min');
+    expect(getReplyBodyText(bantayDuration)).not.toContain('Voluntary donation');
+
     const hiddenStay = conv.ask('How long to stay at Hidden Garden?');
     assertReplyGuardrails(hiddenStay);
     expect(hiddenStay.kind).toBe('answer');
@@ -367,9 +385,36 @@ describe('chatbot engine and knowledge base', () => {
     const devEmail = conv.ask("What is the developer's email?");
     assertReplyGuardrails(devEmail);
     expect(devEmail.kind).toBe('answer');
+    expect(devEmail.suggestions).toEqual(STARTER_SUGGESTIONS);
+    expect(devEmail.suggestions).not.toBe(STARTER_SUGGESTIONS);
     const devText = getReplyBodyText(devEmail);
     expect(devText).toContain('John Eduard Madriaga');
     expect(devText).toContain('educode597@gmail.com');
+
+    const devEmailAddress = conv.ask("What is the developer's email address?");
+    assertReplyGuardrails(devEmailAddress);
+    expect(devEmailAddress.kind).toBe('answer');
+    expect(getReplyBodyText(devEmailAddress)).toContain('educode597@gmail.com');
+    expect(getReplyBodyText(devEmailAddress)).not.toContain(OUT_OF_SCOPE_MESSAGE);
+
+    for (const devSiteQuery of [
+      'Who made this website?',
+      'Who created this site?',
+      'Who built this website?',
+      'Who made the site?'
+    ]) {
+      const devSiteReply = conv.ask(devSiteQuery);
+      assertReplyGuardrails(devSiteReply);
+      expect(devSiteReply.kind).toBe('answer');
+      expect(getReplyBodyText(devSiteReply)).toContain('John Eduard Madriaga');
+    }
+
+    const devHomeAddress = conv.ask("What is the developer's home address?");
+    assertReplyGuardrails(devHomeAddress);
+    expect(devHomeAddress.kind).toBe('partial-out-of-scope');
+    expect(devHomeAddress.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(devHomeAddress.paragraphs[1]).toContain('educode597@gmail.com');
+    expect(devHomeAddress.suggestions).not.toBe(STARTER_SUGGESTIONS);
 
     const devGithub = conv.ask("What is the developer's GitHub?");
     assertReplyGuardrails(devGithub);
@@ -381,6 +426,16 @@ describe('chatbot engine and knowledge base', () => {
     expect(devPhone.kind).toBe('partial-out-of-scope');
     expect(devPhone.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
     expect(devPhone.paragraphs[1]).toContain('educode597@gmail.com');
+
+    for (const hotelQuery of ['Recommend a hotel in Vigan', 'Name a hotel in Vigan']) {
+      const hotelRec = conv.ask(hotelQuery);
+      assertReplyGuardrails(hotelRec);
+      expect(hotelRec.kind).toBe('partial-out-of-scope');
+      expect(hotelRec.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+      expect(hotelRec.paragraphs[1]).toContain(
+        'Restored ancestral inns right on or one block off Calle Crisologo'
+      );
+    }
 
     const weatherTomorrow = conv.ask('What is the weather tomorrow in Vigan?');
     assertReplyGuardrails(weatherTomorrow);
@@ -435,6 +490,8 @@ describe('chatbot engine and knowledge base', () => {
     for (const oos of [
       'What is the capital of France?',
       'Where can I buy Bitcoin in Vigan?',
+      'Who won the World Cup?',
+      'Who is the author of Hamlet?',
       'asdfghjkl',
       '<script>alert(1)</script>'
     ]) {
@@ -541,6 +598,63 @@ describe('chatbot engine and knowledge base', () => {
     assertReplyGuardrails(getThereChip);
     expect(getThereChip.kind).toBe('answer');
     expect(getReplyBodyText(getThereChip)).toContain('Cubao or Pasay');
+
+    for (const seasonQuery of [
+      'When is the best time to visit Vigan?',
+      'What is the best time to visit Vigan?',
+      'When should I visit Vigan?',
+      'Best time to go to Vigan?'
+    ]) {
+      const seasonReply = helpConv.ask(seasonQuery);
+      assertReplyGuardrails(seasonReply);
+      expect(seasonReply.kind).toBe('answer');
+      expect(seasonReply.title).toBe('Best Season & Festivals');
+      expect(getReplyBodyText(seasonReply)).toContain('November through February');
+    }
+
+    for (const getThereQuery of [
+      'How to get to Vigan?',
+      'How do I get to Vigan?',
+      'How do I get there?'
+    ]) {
+      const getThereReply = helpConv.ask(getThereQuery);
+      assertReplyGuardrails(getThereReply);
+      expect(getThereReply.kind).toBe('answer');
+      expect(getThereReply.title).toBe('Getting There');
+      expect(getReplyBodyText(getThereReply)).toContain('Cubao or Pasay');
+    }
+
+    for (const getAroundQuery of ['How do I get around?', 'How to get around Vigan?']) {
+      const getAroundReply = helpConv.ask(getAroundQuery);
+      assertReplyGuardrails(getAroundReply);
+      expect(getAroundReply.kind).toBe('answer');
+      expect(getAroundReply.title).toBe('Getting Around & Staying Over');
+      expect(getReplyBodyText(getAroundReply)).toContain('kalesas and tricycles');
+    }
+
+    const oneDayTrip = helpConv.ask('1 day trip');
+    assertReplyGuardrails(oneDayTrip);
+    expect(oneDayTrip.kind).toBe('answer');
+    expect(oneDayTrip.title).toBe('1-Day Classic Highlights');
+    expect(oneDayTrip.actions).toEqual([
+      { type: 'load-preset', id: 'one-day-classic', label: 'Load this plan' }
+    ]);
+
+    for (const twoDayQuery of ['2 day trip', '2 days in Vigan', 'Weekend plan']) {
+      const twoDayReply = helpConv.ask(twoDayQuery);
+      assertReplyGuardrails(twoDayReply);
+      expect(twoDayReply.kind).toBe('answer');
+      expect(twoDayReply.title).toBe('2-Day Heritage Weekend');
+      expect(twoDayReply.actions).toEqual([
+        { type: 'load-preset', id: 'two-day-heritage', label: 'Load this plan' }
+      ]);
+    }
+
+    const ww2Reply = helpConv.ask('Did Vigan survive World War II?');
+    assertReplyGuardrails(ww2Reply);
+    expect(ww2Reply.kind).toBe('answer');
+    expect(ww2Reply.title).toBe('233 Houses - Built to outlast earthquakes and typhoons');
+    expect(getReplyBodyText(ww2Reply)).toContain('World War II');
   });
 
   it('enforces zero em-dashes, zero en-dashes, and zero emojis across chatbot knowledge exports', () => {

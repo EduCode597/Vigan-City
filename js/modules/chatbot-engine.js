@@ -48,6 +48,11 @@ const GENERIC_TITLE_TOKENS = new Set([
   'around',
   'best',
   'season',
+  'visit',
+  'time',
+  'go',
+  'travel',
+  'ways',
   'built',
   'outlast',
   'set',
@@ -69,7 +74,6 @@ const GENERIC_TITLE_TOKENS = new Set([
   'expensive',
   'walking',
   'drive',
-  'staying',
   'public',
   'squares',
   'local',
@@ -188,7 +192,7 @@ function extractSignificantTokens(text, stopwords, allowGeneric = false) {
   );
 }
 
-function buildPhraseList(items, baseWeight) {
+function buildPhraseList(items, baseWeight, fixedWeight = null) {
   const seen = new Set();
   const out = [];
   for (const raw of items) {
@@ -196,7 +200,10 @@ function buildPhraseList(items, baseWeight) {
     if (!text || seen.has(text)) continue;
     seen.add(text);
     const wordCount = text.split(' ').length;
-    out.push({ text, weight: baseWeight + wordCount * 6 });
+    out.push({
+      text,
+      weight: fixedWeight !== null ? fixedWeight : baseWeight + wordCount * 6
+    });
   }
   return out;
 }
@@ -341,15 +348,18 @@ function buildCategoryEntries(categories, categoryAliases, stopwords) {
 
 function buildHeritageEntries(heritageFacts, stopwords) {
   return heritageFacts.map((fact, idx) => {
-    const exactPhrases = buildPhraseList(
-      [fact.title, fact.metric, `${fact.metric} ${fact.title}`],
-      24
-    );
+    const extraPhrases = containsPhrase(normalizePhrase(fact.detail), 'world war')
+      ? ['world war', 'world war ii', 'world war 2', 'wwii', 'ww2']
+      : [];
+    const exactPhrases = [
+      ...buildPhraseList([fact.title, fact.metric, `${fact.metric} ${fact.title}`], 24),
+      ...buildPhraseList(extraPhrases, 18)
+    ];
     const keywords = new Set([
       ...extractSignificantTokens(fact.metric, stopwords, true),
       ...extractSignificantTokens(fact.title, stopwords, false),
       ...extractSignificantTokens(fact.detail, stopwords, false).filter((t) =>
-        ['unesco', 'new7wonders', 'earthquakes', 'typhoons', 'world', 'war', 'capiz', 'narra', 'colonial', '2015', '1999', '233'].includes(t)
+        ['unesco', 'new7wonders', 'earthquakes', 'typhoons', 'capiz', 'narra', 'colonial', '2015', '1999', '233'].includes(t)
       )
     ]);
     return {
@@ -391,32 +401,55 @@ function buildPresetEntries(presets, stopwords) {
   const presetAliasMap = {
     'one-day-classic': [
       'plan 1 day',
+      'plan one day',
+      'plan for 1 day',
       '1 day plan',
       '1 day itinerary',
       '1 day trip',
+      '1 day in vigan',
       'one day plan',
       'one day itinerary',
+      'one day trip',
+      'one day in vigan',
       'one day classic',
       '1 day classic'
     ],
     'two-day-heritage': [
       'plan 2 days',
+      'plan two days',
+      'plan for 2 days',
       '2 day plan',
       '2 days plan',
+      'two day plan',
+      'two days plan',
       '2 day itinerary',
       '2 days itinerary',
-      'two day plan',
       'two day itinerary',
+      'two days itinerary',
+      '2 day trip',
+      '2 days trip',
+      'two day trip',
+      'two days trip',
+      '2 days in vigan',
+      'two days in vigan',
       '2 day heritage',
+      'weekend plan',
+      'weekend trip',
       'weekend itinerary'
     ]
+  };
+  const lowWeightFallbackMap = {
+    'one-day-classic': ['1 day', 'one day'],
+    'two-day-heritage': ['2 day', '2 days', 'two day', 'two days']
   };
 
   return presets.map((preset) => {
     const aliases = presetAliasMap[preset.id] || [];
+    const fallbackPhrases = lowWeightFallbackMap[preset.id] || [];
     const exactPhrases = [
       ...buildPhraseList([preset.name], 26),
-      ...buildPhraseList(aliases, 18)
+      ...buildPhraseList(aliases, 18),
+      ...buildPhraseList(fallbackPhrases, 0, 12)
     ];
     const keywords = new Set([
       ...extractSignificantTokens(preset.name, stopwords, false),
@@ -438,6 +471,12 @@ function buildTravelEssentialEntries(travelEssentials, stopwords) {
   const essentialAliasMap = {
     'getting-there': [
       'how to get there',
+      'how to get to vigan',
+      'how do i get to vigan',
+      'how do i get there',
+      'how can i get to vigan',
+      'ways to get to vigan',
+      'travel to vigan',
       'how to go to vigan',
       'getting to vigan',
       'bus from manila',
@@ -454,6 +493,14 @@ function buildTravelEssentialEntries(travelEssentials, stopwords) {
       'best season',
       'best season and festivals',
       'best months to visit',
+      'best month',
+      'best months',
+      'best time to visit',
+      'best time to go',
+      'when to visit',
+      'when should i visit',
+      'when is the best time',
+      'what is the best time',
       'longganisa festival',
       'viva vigan',
       'binatbatan',
@@ -464,6 +511,10 @@ function buildTravelEssentialEntries(travelEssentials, stopwords) {
     ],
     'getting-around': [
       'getting around',
+      'getting around vigan',
+      'how to get around',
+      'how do i get around',
+      'how can i get around',
       'getting around and staying over',
       'where to stay',
       'staying over',
@@ -474,12 +525,30 @@ function buildTravelEssentialEntries(travelEssentials, stopwords) {
       'kalesa tour'
     ]
   };
+  // Keep landmark-ambiguous best-time phrases below specific place scores so landmark queries still win.
+  const genericBestTimePhrases = new Set([
+    'best time to visit',
+    'best time to go',
+    'when to visit',
+    'when should i visit',
+    'when is the best time',
+    'what is the best time'
+  ]);
 
   return travelEssentials.map((item) => {
     const aliases = essentialAliasMap[item.id] || [];
+    const specificAliases =
+      item.id === 'best-season'
+        ? aliases.filter((a) => !genericBestTimePhrases.has(a))
+        : aliases;
+    const genericAliases =
+      item.id === 'best-season'
+        ? aliases.filter((a) => genericBestTimePhrases.has(a))
+        : [];
     const exactPhrases = [
       ...buildPhraseList([item.title], 24),
-      ...buildPhraseList(aliases, 16)
+      ...buildPhraseList(specificAliases, 16),
+      ...buildPhraseList(genericAliases, 0, 12)
     ];
     const keywords = new Set([
       ...extractSignificantTokens(item.title, stopwords, false),
@@ -550,9 +619,23 @@ function buildDeveloperEntries(developer, stopwords) {
   const phrases = [
     developer.name,
     developer.handle,
-    'who made this site',
-    'who built this site',
+    'who made this website',
+    'who built this website',
     'who created this website',
+    'who made this site',
+    'who created this site',
+    'who built this site',
+    'who made the site',
+    'who made the website',
+    'who created the site',
+    'who created the website',
+    'who built the site',
+    'who built the website',
+    'who developed',
+    'site author',
+    'website author',
+    'author of this site',
+    'author of this website',
     'about the developer',
     'developer email',
     'contact developer'
@@ -563,7 +646,6 @@ function buildDeveloperEntries(developer, stopwords) {
     ...extractSignificantTokens(developer.handle || '', stopwords, true),
     'developer',
     'creator',
-    'author',
     'programmer',
     'educode',
     'educode597',
@@ -675,8 +757,15 @@ function detectIntent(normalized, tokens, intentKeywords) {
   for (const [intentName, config] of Object.entries(intentKeywords || {})) {
     let score = 0;
     for (const phrase of config.phrases || []) {
-      if (containsPhrase(normalized, normalizePhrase(phrase))) {
-        score += 3;
+      const normalizedPhrase = normalizePhrase(phrase);
+      if (intentName === 'fee' && normalizedPhrase === 'how much') {
+        if (/\bhow much\b(?!\s+(?:more\s+|extra\s+)?time\b)/.test(normalized)) {
+          score += 3;
+        }
+        continue;
+      }
+      if (containsPhrase(normalized, normalizedPhrase)) {
+        score += normalizedPhrase.split(' ').length >= 3 ? 4 : 3;
       }
     }
     for (const token of config.tokens || []) {
@@ -739,8 +828,11 @@ function shouldDowngradeToPartial(winner, intent, triggers) {
   const hasAnyTrigger = matchedPhrases.length > 0 || matchedTokens.length > 0;
 
   if (winner.type === 'developer') {
+    const hasEmailToken = matchedTokens.includes('email');
     const hasNonFooterPhrase = matchedPhrases.length > 0;
-    const hasNonFooterToken = matchedTokens.some((t) => !FOOTER_LINK_TOKENS.has(t));
+    const hasNonFooterToken = matchedTokens.some(
+      (t) => !FOOTER_LINK_TOKENS.has(t) && !(t === 'address' && hasEmailToken)
+    );
     return hasNonFooterPhrase || hasNonFooterToken || intent === 'fee';
   }
 
@@ -1290,7 +1382,7 @@ function formatMatchReply(winner, intent, kb) {
         title: dev.name,
         paragraphs: [parts.join(' ')],
         actions: [],
-        suggestions: STARTER_SUGGESTIONS,
+        suggestions: [...STARTER_SUGGESTIONS],
         sourceSnippets: getDeveloperSnippets(dev)
       };
     }
@@ -1312,7 +1404,7 @@ function formatMatchReply(winner, intent, kb) {
         kind: 'out-of-scope',
         paragraphs: [OUT_OF_SCOPE_MESSAGE],
         actions: [],
-        suggestions: STARTER_SUGGESTIONS
+        suggestions: [...STARTER_SUGGESTIONS]
       };
   }
 }
@@ -1387,7 +1479,7 @@ function formatPartialOutOfScope(winner, kb) {
       `Here is what the site says about ${subjectName}: ${contextText}`
     ],
     actions,
-    suggestions: STARTER_SUGGESTIONS,
+    suggestions: [...STARTER_SUGGESTIONS],
     sourceSnippets: snippets.filter(Boolean)
   };
 }
@@ -1433,13 +1525,16 @@ export function createConversation(kb) {
 
     let winner = scored[0]?.entry || null;
 
+    const hasExplicitPronounFollowup =
+      tokens.includes('it') ||
+      tokens.includes('its') ||
+      FOLLOWUP_PRONOUN_PHRASES.some((p) => containsPhrase(normalized, p));
+
     if (
-      winner?.id === 'cat:fees' &&
       lastPlaceId &&
-      scored[0].score <= 7 &&
-      (tokens.includes('it') ||
-        tokens.includes('its') ||
-        FOLLOWUP_PRONOUN_PHRASES.some((p) => containsPhrase(normalized, p)))
+      hasExplicitPronounFollowup &&
+      ((winner?.id === 'cat:fees' && scored[0].score <= 7) ||
+        (winner?.id === 'essential:best-season' && scored[0].score <= 12))
     ) {
       const placeEntry = kb.entries.find((e) => e.id === `place:${lastPlaceId}`);
       if (placeEntry) winner = placeEntry;

@@ -169,10 +169,28 @@ test.describe('Ask Vigan Chatbot E2E', () => {
     );
     await expect(loadPresetBtn).toHaveText('Load this plan (replaces saved stops)');
 
+    // While desktop chat panel is open, opening #planDrawer lets Escape close the drawer while keeping chat open
+    const planDrawer = page.locator('#planDrawer');
+    await page.locator('#planTriggerBtn').click();
+    await expect(planDrawer).toHaveAttribute('open', '');
+    await expect(chatPanel).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(planDrawer).not.toHaveAttribute('open', '');
+    await expect(chatPanel).toBeVisible();
+
     await loadPresetBtn.click();
     await expect(chatPanel).toBeHidden();
-    await expect(page.locator('#planDrawer')).toHaveAttribute('open', '');
+    await expect(planDrawer).toHaveAttribute('open', '');
     await expect(page.locator('#planTriggerBtn [data-plan-count]')).toHaveText('5');
+
+    // Close #planDrawer, reopen chat panel, and verify #chatCloseBtn closes #chatPanel
+    await page.keyboard.press('Escape');
+    await expect(planDrawer).not.toHaveAttribute('open', '');
+    await chatFab.click();
+    await expect(chatPanel).toBeVisible();
+    await page.locator('#chatCloseBtn').click();
+    await expect(chatPanel).toBeHidden();
 
     expect(errors).toEqual([]);
   });
