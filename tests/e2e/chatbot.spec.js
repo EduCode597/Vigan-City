@@ -45,7 +45,7 @@ async function assertFullScreenPanel(page, chatPanel, expectedHeight, minWidth, 
 }
 
 test.describe('Ask Vigan Chatbot E2E', () => {
-  test('desktop floating card answers Vigan questions, runs explorer/plan actions, and keeps layout clean', async ({
+  test('desktop floating card answers Vigan questions, handles out-of-scope rules, and keeps layout clean', async ({
     page
   }) => {
     const errors = trackPageErrors(page);
@@ -160,17 +160,50 @@ test.describe('Ask Vigan Chatbot E2E', () => {
       "This information is outside the website's information."
     );
 
-    // Click "Plan 1 day" chip -> preset action warns replacement -> click loads 5 stops & opens drawer
+    // Close button closes desktop floating card and restores focus to FAB
+    await page.locator('#chatCloseBtn').click();
+    await expect(chatPanel).toBeHidden();
+    await expect(chatFab).toBeFocused();
+
+    expect(errors).toEqual([]);
+  });
+
+  test('desktop preset loading and Escape modal precedence over open chat panel', async ({
+    page
+  }) => {
+    const errors = trackPageErrors(page);
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('#explorerList [data-place-row]')).toHaveCount(11);
+
+    const chatFab = page.locator('#chatFab');
+    const chatPanel = page.locator('#chatPanel');
+    const planDrawer = page.locator('#planDrawer');
+    const botReplies = getBotReplies(page);
+
+    await chatFab.click();
+    await expect(chatPanel).toBeVisible();
+
+    // Save 1 stop first so preset loading displays the replacement warning
+    await askQuestion(page, 'Tell me about Bantay Bell Tower');
+    await expect(botReplies).toHaveCount(2);
+    await botReplies
+      .nth(1)
+      .locator('[data-chat-action="add-place"][data-action-id="bantay-bell-tower"]')
+      .click();
+    await expect(page.locator('#planTriggerBtn [data-plan-count]')).toHaveText('1');
+
+    // Click "Plan 1 day" chip -> preset action warns replacement
     await page.locator('#chatSuggestions [data-chat-suggestion="Plan 1 day"]').click();
-    await expect(botReplies).toHaveCount(6);
-    const presetReply = botReplies.nth(5);
+    await expect(botReplies).toHaveCount(3);
+    const presetReply = botReplies.nth(2);
     const loadPresetBtn = presetReply.locator(
       '[data-chat-action="load-preset"][data-action-id="one-day-classic"]'
     );
     await expect(loadPresetBtn).toHaveText('Load this plan (replaces saved stops)');
 
-    // While desktop chat panel is open, opening #planDrawer lets Escape close the drawer while keeping chat open
-    const planDrawer = page.locator('#planDrawer');
+    // Open #planDrawer over open #chatPanel: Escape closes #planDrawer while keeping #chatPanel open
     await page.locator('#planTriggerBtn').click();
     await expect(planDrawer).toHaveAttribute('open', '');
     await expect(chatPanel).toBeVisible();
@@ -179,18 +212,11 @@ test.describe('Ask Vigan Chatbot E2E', () => {
     await expect(planDrawer).not.toHaveAttribute('open', '');
     await expect(chatPanel).toBeVisible();
 
+    // Load preset closes #chatPanel and opens #planDrawer with 5 stops
     await loadPresetBtn.click();
     await expect(chatPanel).toBeHidden();
     await expect(planDrawer).toHaveAttribute('open', '');
     await expect(page.locator('#planTriggerBtn [data-plan-count]')).toHaveText('5');
-
-    // Close #planDrawer, reopen chat panel, and verify #chatCloseBtn closes #chatPanel
-    await page.keyboard.press('Escape');
-    await expect(planDrawer).not.toHaveAttribute('open', '');
-    await chatFab.click();
-    await expect(chatPanel).toBeVisible();
-    await page.locator('#chatCloseBtn').click();
-    await expect(chatPanel).toBeHidden();
 
     expect(errors).toEqual([]);
   });
