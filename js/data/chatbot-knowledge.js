@@ -77,6 +77,7 @@ export const CHATBOT_KNOWLEDGE = {
       'burnay kiln',
       'dragon kiln',
       'potters wheel',
+      "potter's wheel",
       'clay jars'
     ],
     'plaza-burgos': [
@@ -171,11 +172,13 @@ export const CHATBOT_KNOWLEDGE = {
       'entry fees',
       'admission fees',
       'whats free',
+      "what's free",
       'what is free',
       'free places',
       'free attractions',
       'free landmarks',
       'free entry',
+      'free to visit',
       'fees'
     ],
     food: [
@@ -328,7 +331,7 @@ export const CHATBOT_KNOWLEDGE = {
       ]
     },
     highlight: {
-      phrases: ['must see', 'dont miss', 'known for', 'famous for', 'what to see'],
+      phrases: ['must see', 'dont miss', "don't miss", 'known for', 'famous for', 'what to see'],
       tokens: ['highlight', 'highlights', 'feature', 'features', 'special']
     }
   },

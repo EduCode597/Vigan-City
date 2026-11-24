@@ -179,6 +179,28 @@ describe('chatbot engine and knowledge base', () => {
     assertReplyGuardrails(burgosHighlight);
     expect(burgosHighlight.kind).toBe('answer');
     expect(getReplyBodyText(burgosHighlight)).toContain('1821 Basi Revolt painting gallery');
+
+    const dontMissHighlight = conv.ask("What should I don't miss at Padre Burgos House?");
+    assertReplyGuardrails(dontMissHighlight);
+    expect(dontMissHighlight.kind).toBe('answer');
+    expect(getReplyBodyText(dontMissHighlight)).toContain('1821 Basi Revolt painting gallery');
+
+    const pottersWheel = conv.ask("Where is the potter's wheel?");
+    assertReplyGuardrails(pottersWheel);
+    expect(pottersWheel.kind).toBe('answer');
+    expect(getReplyBodyText(pottersWheel)).toContain('Pagburnayan Jar Factory');
+
+    const howClose = conv.ask('How close is Syquia Mansion to the plaza?');
+    assertReplyGuardrails(howClose);
+    expect(howClose.kind).toBe('answer');
+    expect(getReplyBodyText(howClose)).toContain('Quirino Boulevard');
+    expect(getReplyBodyText(howClose)).toContain('4 min walk');
+
+    const closeTo = conv.ask('Is Padre Burgos House close to Calle Crisologo?');
+    assertReplyGuardrails(closeTo);
+    expect(closeTo.kind).toBe('answer');
+    expect(getReplyBodyText(closeTo)).toContain('Padre Burgos House');
+    expect(getReplyBodyText(closeTo)).toContain('3 min walk');
   });
 
   it('gives history intent precedence over bestTime on "when was / when did" questions (Review Focus #1)', () => {
@@ -244,6 +266,13 @@ describe('chatbot engine and knowledge base', () => {
     for (const place of viganData.PLACES) {
       expect(feesText).toContain(place.entryFee);
     }
+
+    for (const freeQuery of ["What's free?", "What's free in Vigan?"]) {
+      const freeReply = conv.ask(freeQuery);
+      assertReplyGuardrails(freeReply);
+      expect(freeReply.kind).toBe('list');
+      expect(getReplyBodyText(freeReply)).toContain(faqFees.answer);
+    }
   });
 
   it('remembers the last landmark for conversational follow-ups and switches or resets context cleanly', () => {
@@ -265,6 +294,12 @@ describe('chatbot engine and knowledge base', () => {
     expect(followUpDist.kind).toBe('answer');
     expect(getReplyBodyText(followUpDist)).toContain('4 min walk');
     expect(followUpDist.actions.some((a) => a.id === 'syquia-mansion')).toBe(true);
+
+    const followUpFree = conv.ask('Is it free?');
+    assertReplyGuardrails(followUpFree);
+    expect(followUpFree.kind).toBe('answer');
+    expect(getReplyBodyText(followUpFree)).toContain('PHP 30 entrance');
+    expect(followUpFree.actions.some((a) => a.id === 'syquia-mansion')).toBe(true);
 
     const switched = conv.ask('What about Bantay Bell Tower?');
     assertReplyGuardrails(switched);
@@ -363,6 +398,39 @@ describe('chatbot engine and knowledge base', () => {
     assertReplyGuardrails(busHours);
     expect(busHours.kind).toBe('answer');
     expect(getReplyBodyText(busHours)).toContain('7 to 8 hours');
+
+    const syquiaClose = conv.ask('What time does Syquia Mansion close?');
+    assertReplyGuardrails(syquiaClose);
+    expect(syquiaClose.kind).toBe('partial-out-of-scope');
+    expect(syquiaClose.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(syquiaClose.paragraphs[1]).toContain('Syquia Mansion Museum');
+
+    const bibingkaCost = conv.ask('How much does Royal Bibingka cost?');
+    assertReplyGuardrails(bibingkaCost);
+    expect(bibingkaCost.kind).toBe('partial-out-of-scope');
+    expect(bibingkaCost.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(bibingkaCost.paragraphs[1]).toContain('Royal Bibingka');
+
+    const planCost = conv.ask('How much does the 1-day plan cost?');
+    assertReplyGuardrails(planCost);
+    expect(planCost.kind).toBe('partial-out-of-scope');
+    expect(planCost.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(planCost.paragraphs[1]).toContain('1-Day Classic Highlights');
+    expect(planCost.actions).toEqual([
+      { type: 'load-preset', id: 'one-day-classic', label: 'Load this plan' }
+    ]);
+
+    const presetsCost = conv.ask('How much do trip presets cost?');
+    assertReplyGuardrails(presetsCost);
+    expect(presetsCost.kind).toBe('partial-out-of-scope');
+    expect(presetsCost.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(presetsCost.paragraphs[1]).toContain('1-Day Classic Highlights');
+
+    const siteHelpCost = conv.ask('How much does My Vigan Plan cost?');
+    assertReplyGuardrails(siteHelpCost);
+    expect(siteHelpCost.kind).toBe('partial-out-of-scope');
+    expect(siteHelpCost.paragraphs[0]).toBe(OUT_OF_SCOPE_MESSAGE);
+    expect(siteHelpCost.paragraphs[1]).toContain('My Vigan Plan');
 
     for (const oos of [
       'What is the capital of France?',

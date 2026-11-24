@@ -117,7 +117,9 @@ const PRICELESS_TYPES = new Set([
   'gallery',
   'travel-essential',
   'heritage-fact',
-  'why-vigan'
+  'why-vigan',
+  'preset',
+  'site-help'
 ]);
 
 /**
@@ -320,6 +322,9 @@ function buildCategoryEntries(categories, categoryAliases, stopwords) {
     const keywords = new Set(
       aliases.flatMap((a) => extractSignificantTokens(a, stopwords, false))
     );
+    if (spec.key === 'fees') {
+      keywords.add('free');
+    }
     entries.push({
       id: `cat:${spec.key}`,
       type: 'category',
@@ -707,7 +712,11 @@ function detectIntent(normalized, tokens, intentKeywords) {
 }
 
 function findMatchedUnsupportedTriggers(normalized, tokens, kb) {
-  const sanitizedNormalized = normalized.replace(/\bopen air\b/g, 'openair');
+  const sanitizedNormalized = normalized
+    .replace(/\bopen air\b/g, 'openair')
+    .replace(/\bhow close\b/g, 'howclose')
+    .replace(/\bclose to\b/g, 'closeto')
+    .replace(/\bclose by\b/g, 'closeby');
   const sanitizedTokens = sanitizedNormalized ? sanitizedNormalized.split(' ') : [];
   const matchedPhrases = [];
   const matchedTokens = [];
@@ -732,22 +741,23 @@ function shouldDowngradeToPartial(winner, intent, triggers) {
   if (winner.type === 'developer') {
     const hasNonFooterPhrase = matchedPhrases.length > 0;
     const hasNonFooterToken = matchedTokens.some((t) => !FOOTER_LINK_TOKENS.has(t));
-    return hasNonFooterPhrase || hasNonFooterToken;
+    return hasNonFooterPhrase || hasNonFooterToken || intent === 'fee';
   }
 
   if (winner.type === 'site-help') {
     const hasNonExemptPhrase = matchedPhrases.length > 0;
     const hasNonExemptToken = matchedTokens.some((t) => !SITE_HELP_EXEMPT_TOKENS.has(t));
-    return hasNonExemptPhrase || hasNonExemptToken;
+    return hasNonExemptPhrase || hasNonExemptToken || intent === 'fee';
   }
 
   if (hasAnyTrigger) return true;
 
   if (intent === 'fee') {
     if (PRICELESS_TYPES.has(winner.type)) return true;
+    if (winner.type === 'faq' && winner.payload?.id !== 'faq-fees') return true;
     if (
       winner.type === 'category' &&
-      ['food', 'crafts', 'gallery', 'why-vigan'].includes(winner.payload?.kind)
+      ['food', 'crafts', 'gallery', 'why-vigan', 'presets'].includes(winner.payload?.kind)
     ) {
       return true;
     }
@@ -1422,6 +1432,18 @@ export function createConversation(kb) {
       });
 
     let winner = scored[0]?.entry || null;
+
+    if (
+      winner?.id === 'cat:fees' &&
+      lastPlaceId &&
+      scored[0].score <= 7 &&
+      (tokens.includes('it') ||
+        tokens.includes('its') ||
+        FOLLOWUP_PRONOUN_PHRASES.some((p) => containsPhrase(normalized, p)))
+    ) {
+      const placeEntry = kb.entries.find((e) => e.id === `place:${lastPlaceId}`);
+      if (placeEntry) winner = placeEntry;
+    }
 
     if (!winner) {
       if (
